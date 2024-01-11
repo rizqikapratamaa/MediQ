@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+    <h2>Login Page using Phone Number</h2>
+    <form id="loginForm" action="/login-phone" method="post">
+        <div class="container">
+            <label for="phoneNumber"><b>Phone Number</b></label><br>
+            <input type="text" placeholder="Enter Phone Number" name="phoneNumber" required><br>
+
+            <label for="password"><b>Password</b></label><br>
+            <input type="password" placeholder="Enter Password" name="password" required><br>
+            <p id="error" style="color:red;"></p>
+
+            <button type="submit">Login</button>
+        </div>
+    </form>
+    <p><a href="/login-email"> Masuk dengan email</a></p>
+    <p>Belum punya akun?<a href="/"> Daftar</a></p>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var error = urlParams.get('error');
+        var message = urlParams.get('message');
+        if (error) {
+            document.getElementById('error').innerText = error;
+            history.replaceState(null, '', location.pathname);
+        }
+        if (message) {
+            // Show a success message
+            history.replaceState(null, '', location.pathname);
+        }
+    </script>
+</body>
+</html>

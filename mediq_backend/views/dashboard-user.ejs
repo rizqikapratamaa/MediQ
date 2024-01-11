@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Homepage</title>
+</head>
+<body>
+    <h1>Halo, <%= user.fullName %></h1>
+    <p>Selamat datang di MediQ!</p>
+    <div>
+        <form action="/rekam-medis" method="get">
+            <input type="submit" value="Cek rekam medis pribadi">
+        </form>
+        <form action="/booking-klinik" method="get">
+            <input type="submit" value="Booking antrian faskes">
+        </form>
+        <form action="/konsultasi-kesehatan" method="get">
+            <input type="submit" value="Konsultasi dokter online">
+        </form>
+    </div>
+
+    <p>
+        <form action="/logout" method="post">
+            <input type="submit" value="Logout">
+        </form>
+    </p>
+</body>
+</html>
