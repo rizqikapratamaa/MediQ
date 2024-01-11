@@ -2,7 +2,6 @@ const express = require('express');
 const firebase = require('firebase');
 const router = express.Router();
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyBU-D4ErWsAMc9RWsP8CgT-B47EO75Ie8s",
     authDomain: "mediq-12a20.firebaseapp.com",
