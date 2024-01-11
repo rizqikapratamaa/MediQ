@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import BackButton from '../Assets/BackArrow.svg'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import VisibilityOn from "../Assets/visibility.svg"
 import VisibilityOff from "../Assets/visibility_off.svg"
 import axios from 'axios';
+import { forbiddenNotification } from "../toastMessage";
 
 const EmailRegister = () =>{
 
-
+    const navigate = useNavigate();
     const [nik, setNik] = useState('');
     const [email, setEmail] = useState('');
     const [birthDate, setBorn] = useState('');
@@ -87,9 +88,8 @@ const EmailRegister = () =>{
         //Check nik
         event.preventDefault();
         if(checkEmail() && checkBorn() && checkNik() && passwordChecker()){
-            try{
-                
-                const response = await axios.post("http://localhost:8000/signup-email",{
+            try {
+                const response = await axios.post("http://localhost:8000/signup-email", {
                     email,
                     phoneNumber: '',
                     gender,
@@ -98,9 +98,15 @@ const EmailRegister = () =>{
                     nik,
                     password,
                     role
-                })
-            } catch (error){
-                console.error(error.response.data);
+                });
+
+                if(response.request.status === 200){
+                    navigate('/');
+                }
+            } catch (error) {
+                // Log the error to the console
+                // console.error(error);
+                alert(error.response.data)
             }
         } 
     }

@@ -12,30 +12,12 @@ import {BrowserRouter as Router, Routes,Route,Link, Navigate} from 'react-router
 
 import ScrollToTop from './ScrollToTop';
 import { useEffect, useState } from 'react';
-import axios from 'axios'
+
 
 function App() {
-  const [backendData, setBackendData] = useState([{}]);
+  
   const isAuthenticated = false;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-  
-        const data = await response.json();
-        setBackendData(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // You can add additional error handling logic here
-      }
-    };
-  
-    fetchData();
-  }, []);
   return (
     <div>
       <Router>
