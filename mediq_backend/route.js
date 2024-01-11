@@ -33,20 +33,16 @@ router.post('/signup-email', (req, res) => {
     const role = 'patient';
     const db = firebase.firestore();
     
-    // Cek apakah email atau NIK sudah ada di database
     db.collection('users').where('email', '==', email).get()
     .then((snapshot) => {
         if (!snapshot.empty) {
-            // Jika email sudah ada, kirim pesan error
             res.redirect('/signup-email?error=Email sudah terdaftar');
         } else {
             db.collection('users').where('nik', '==', nik).get()
             .then((snapshot) => {
                 if (!snapshot.empty) {
-                    // Jika NIK sudah ada, kirim pesan error
                     res.redirect('/signup-email?error=NIK sudah terdaftar');
                 } else {
-                    // Jika email dan NIK belum ada, lanjutkan proses pendaftaran
                     db.collection('users').add({
                         email,
                         phoneNumber: '',
@@ -87,20 +83,16 @@ router.post('/signup-phone', (req, res) => {
     const role = 'patient';
     const db = firebase.firestore();
     
-    // Cek apakah nomor telepon atau NIK sudah ada di database
     db.collection('users').where('phoneNumber', '==', phoneNumber).get()
     .then((snapshot) => {
         if (!snapshot.empty) {
-            // Jika nomor telepon sudah ada, kirim pesan error
             res.redirect('/signup-phone?error=Nomor telepon sudah terdaftar');
         } else {
             db.collection('users').where('nik', '==', nik).get()
             .then((snapshot) => {
                 if (!snapshot.empty) {
-                    // Jika NIK sudah ada, kirim pesan error
                     res.redirect('/signup-phone?error=NIK sudah terdaftar');
                 } else {
-                    // Jika nomor telepon dan NIK belum ada, lanjutkan proses pendaftaran
                     db.collection('users').add({
                         email: '',
                         phoneNumber,
@@ -131,59 +123,47 @@ router.post('/signup-phone', (req, res) => {
 
 
 
-router.get('/login-phone', redirectIfLoggedIn, (req, res) => {
-    res.sendFile(__dirname + '/public/login-phone.html');
+router.get('/login', redirectIfLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/public/login.html');
 });
 
-router.post('/login-phone', (req, res) => {
-    const { phoneNumber, password } = req.body;
+router.post('/login', (req, res) => {
+    const { identifier, password } = req.body;
     const db = firebase.firestore();
-    db.collection('users').where('phoneNumber', '==', phoneNumber).get()
-    .then((snapshot) => {
-        if (snapshot.empty) {
-            res.redirect('/login-phone?error=Maaf, nomor telepon tidak terdaftar');
-            return;
-        }
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            if (data.password !== password) {
-                res.redirect('/login-phone?error=Maaf, password salah');
+
+    if (typeof identifier !== 'string' || !identifier.trim()) {
+        res.redirect('/login?error=Format identifier tidak valid');
+        return;
+    }
+
+    let queryField = 'email';
+    if (identifier.includes('@')) {
+        queryField = 'email';
+    } else {
+        queryField = 'phoneNumber';
+    }
+
+    db.collection('users').where(queryField, '==', identifier).get()
+        .then((snapshot) => {
+            if (snapshot.empty) {
+                res.redirect('/login?error=Maaf, ' + queryField + ' tidak terdaftar');
                 return;
             }
-            req.session.user = data;
-            res.redirect('/dashboard');
+
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                if (data.password !== password) {
+                    res.redirect('/login?error=Maaf, password salah');
+                    return;
+                }
+                req.session.user = data;
+                res.redirect('/dashboard');
+            });
+        })
+        .catch((error) => {
+            console.error("Error during login:", error);
+            res.status(500).send('Terjadi kesalahan.');
         });
-    }).catch((error) => {
-        console.error("Error adding data: ", error);
-    });
-});
-
-
-router.get('/login-email', redirectIfLoggedIn, (req, res) => {
-    res.sendFile(__dirname + '/public/login-email.html');
-});
-
-router.post('/login-email', (req, res) => {
-    const { email, password } = req.body;
-    const db = firebase.firestore();
-    db.collection('users').where('email', '==', email).get()
-    .then((snapshot) => {
-        if (snapshot.empty) {
-            res.redirect('/login-email?error=Maaf, email tidak terdaftar');
-            return;
-        }
-        snapshot.forEach((doc) => {
-            const data = doc.data();
-            if (data.password !== password) {
-                res.redirect('/login-email?error=Maaf, password salah');
-                return;
-            }
-            req.session.user = data;
-            res.redirect('/dashboard');
-        });
-    }).catch((error) => {
-        console.error("Error adding data: ", error);
-    });
 });
 
 router.post('/logout', (req, res) => {
