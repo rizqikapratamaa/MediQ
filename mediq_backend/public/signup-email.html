@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup Page</title>
+</head>
+<body>
+    <h2>Signup Form</h2>
+    <form action="/signup-email" method="post">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br>
+        <label for="gender">Jenis Kelamin:</label><br>
+        <input type="radio" id="male" name="gender" value="laki-laki">
+        <label for="male">Laki-laki</label><br>
+        <input type="radio" id="female" name="gender" value="perempuan">
+        <label for="female">Perempuan</label><br>
+        <label for="fullName">Nama Lengkap:</label><br>
+        <input type="text" id="fullName" name="fullName" required><br>
+        <label for="birthDate">Tanggal Lahir:</label><br>
+        <input type="date" id="birthDate" name="birthDate" required><br>
+        <label for="nik">Nomor Induk Kependudukan:</label><br>
+        <input type="text" id="nik" name="nik" pattern="\d{16}" required><br>
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password" required><br>
+        <p id="error" style="color:red;"></p>
+        <input type="submit" value="Submit">
+    </form>
+    <p><a href="/signup-phone">Daftar dengan nomor telepon</a></p>
+    <p>Sudah punya akun?<a href="/login-email"> Masuk</a></p>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var error = urlParams.get('error');
+        if (error) {
+            document.getElementById('error').innerText = error;
+            history.replaceState(null, '', location.pathname);
+        }
+    </script>
+</body>
+</html>

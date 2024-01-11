@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Layanan Gigi dan Mulut</title>
+    <style>
+        .doctor-info {
+            line-height: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Layanan Gigi dan Mulut</h1>
+    <% if (doctors.length > 0) { %>
+        <% doctors.forEach(function(doctor) { %>
+            <div class="doctor-info">
+                <h2><%= doctor.name %></h2>
+                <p>Bidang: <%= doctor.bidang %></p>
+                <p>Pengalaman: <%= doctor.experience %> tahun</p>
+                <p>Harga: <%= doctor.price %></p>
+                <p>Rating: <%= doctor.rating %></p>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>Belum ada dokter gigi dan mulut yang tersedia.</p>
+    <% } %>
+</body>
+</html>

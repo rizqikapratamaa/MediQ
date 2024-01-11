@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pilih Jadwal</title>
+</head>
+<body>
+    <h1>Pilih Jadwal Konsultasi</h1>
+    <% if (doctors.length > 0) { %>
+        <% doctors.forEach(function(doctor) { %>
+            <div class="doctor-info">
+                <h2><%= doctor.name %></h2>
+                <form action="/konsultasi-kesehatan/layanan-umum/<%= encodeURIComponent(doctor.id) %>/booking" method="post">
+                    <label for="tanggal">Pilih Tanggal:</label>
+                    <input type="date" id="tanggal" name="tanggal" required><br>
+        
+                    <label for="waktu">Pilih Waktu:</label>
+                    <input type="time" id="waktu" name="waktu" required><br>
+        
+                    <button type="submit">Pesan Konsultasi</button>
+                </form>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>Belum ada dokter umum yang tersedia.</p>
+    <% } %>
+</body>
+</html>
