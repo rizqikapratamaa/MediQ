@@ -1,6 +1,6 @@
 # MediQ - Beyond the Clinic Walls
 
-![MediQ Logo](logo.png)
+![MediQ Logo](logo.svg)
 
 ## Introduction
 
