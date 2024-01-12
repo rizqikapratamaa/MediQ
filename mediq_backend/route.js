@@ -172,11 +172,20 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/dashboard', (req, res) => {
-    if (!req.session.user){
+    if (!req.session.user) {
         res.redirect('/');
         return;
     }
-    res.render('dashboard-user', { user: req.session.user });
+
+    const { role } = req.session.user;
+
+    if (role === 'patient') {
+        res.render('dashboard-user', { user: req.session.user });
+    } else if (role === 'clinic') {
+        res.render('dashboard-clinic', { user: req.session.user });
+    } else {
+        res.redirect('/');
+    }
 });
 
 router.get('/rekam-medis', (req, res) => {

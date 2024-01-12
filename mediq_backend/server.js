@@ -4,7 +4,7 @@ const router = require('./route');
 const session = require('express-session');
 
 const app = express();
-const port = 8000;
+const port = 8001;
 
 const cors = require('cors');
 app.use(cors());
@@ -31,6 +31,7 @@ router.get('/', (req, res) => {
         res.redirect('/dashboard');
     } else {
         res.sendFile(__dirname + '../mediq_frontend/src/App.js');
+        // res.sendFile(__dirname + '/public/welcome-page.html');
     }
 });
 
