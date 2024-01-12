@@ -5,7 +5,7 @@ import VisibilityOn from "../Assets/visibility.svg"
 import VisibilityOff from "../Assets/visibility_off.svg"
 import axios from 'axios'
 
-const LoginForm = () =>{
+const LoginForm = ({handleLogin}) =>{
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -26,14 +26,31 @@ const LoginForm = () =>{
                     identifier: identifier, password
                 });
 
+                const data = response.data
+
                 if(response.request.status === 200){
-                    console.log(response.json());
-                    navigate('/homepage')
+                    const fullName = data.fullName;
+                    const userRole = data.role;
+                    console.log(data.fullName);
+                    if(userRole === 'patient'){
+                        navigate('/homepage', {state: {data : fullName}});
+                        handleLogin();
+                    }else{
+                        
+                        navigate('/clinicHomepage');
+                        handleLogin();
+                    }
+
                 }
             } catch(error){
                 // alert(error.response.data);
                 console.log(error);
-                alert(error.response.data);
+                if(error.response.status === 400){          
+                    alert(error.response.data);
+                } else{
+                    alert('Network Error');
+                }
+                
             }
         } else{
             if(phone.length > 0){

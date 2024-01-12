@@ -4,7 +4,7 @@ const router = require('./route');
 const session = require('express-session');
 
 const app = express();
-const port = 8001;
+const port = 8000;
 
 const cors = require('cors');
 app.use(cors());

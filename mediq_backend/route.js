@@ -157,10 +157,11 @@ router.post('/login', (req, res) => {
                     return;
                 }
                 const userFullName = data.fullName;
+                const userRole = data.role
                 req.session.user = data;
                 res.status(200).json({
                     message : 'Anda berhasil Login',
-                    fullName : userFullName,
+                    fullName : userFullName, role : userRole,
                 });
                 res.redirect('/dashboard');
             });
