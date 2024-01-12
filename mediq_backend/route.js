@@ -132,7 +132,7 @@ router.post('/login', (req, res) => {
     const db = firebase.firestore();
 
     if (typeof identifier !== 'string' || !identifier.trim()) {
-        res.redirect('/login?error=Format identifier tidak valid');
+        res.status(400).send('Format identifier tidak terdaftar')
         return;
     }
 
@@ -146,23 +146,27 @@ router.post('/login', (req, res) => {
     db.collection('users').where(queryField, '==', identifier).get()
         .then((snapshot) => {
             if (snapshot.empty) {
-                res.redirect('/login?error=Maaf, ' + queryField + ' tidak terdaftar');
+                res.status(400).send('Maaf, '+queryField + ' tidak terdaftar' );
                 return;
             }
 
             snapshot.forEach((doc) => {
                 const data = doc.data();
                 if (data.password !== password) {
-                    res.redirect('/login?error=Maaf, password salah');
+                    res.status(400).send('Maaf, Password salah');
                     return;
                 }
+                const userFullName = data.fullName;
                 req.session.user = data;
+                res.status(200).json({
+                    message : 'Anda berhasil Login',
+                    fullName : userFullName,
+                });
                 res.redirect('/dashboard');
             });
         })
         .catch((error) => {
             console.error("Error during login:", error);
-            res.status(500).send('Terjadi kesalahan.');
         });
 });
 

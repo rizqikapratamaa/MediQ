@@ -22,9 +22,6 @@ app.use(express.json());
 
 app.set('view engine', 'ejs');
 
-app.get('/api', (req, res) => {
-    res.json({"users" : ["userOne","userTwo","iserThree"]})
-});
 app.use('/', router);
 router.get('/', (req, res) => {
     if (req.session.user) {

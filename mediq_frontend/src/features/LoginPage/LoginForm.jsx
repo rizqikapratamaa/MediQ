@@ -3,12 +3,12 @@ import { Link , useNavigate} from "react-router-dom";
 import BackButton from '../Assets/BackArrow.svg'
 import VisibilityOn from "../Assets/visibility.svg"
 import VisibilityOff from "../Assets/visibility_off.svg"
+import axios from 'axios'
 
 const LoginForm = () =>{
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [role, setRole] = useState("");
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
 
@@ -16,12 +16,25 @@ const LoginForm = () =>{
         setShowPassword((prevShowPassword) => !prevShowPassword);
     }
 
-    const handleSubmission = (event) =>{
+    const handleSubmission = async(event) =>{
         event.preventDefault();
-        console.log("phone: ", {phone})
-        console.log("email: ",{email})
+        const identifier = document.getElementsByName('identifier')[0].value;
+
         if(validEmail(email) || validPhone()){
-            navigate("/homepage")
+            try{
+                const response = await axios.post("http://localhost:8000/login" ,{
+                    identifier: identifier, password
+                });
+
+                if(response.request.status === 200){
+                    console.log(response.json());
+                    navigate('/homepage')
+                }
+            } catch(error){
+                // alert(error.response.data);
+                console.log(error);
+                alert(error.response.data);
+            }
         } else{
             if(phone.length > 0){
                 alert("No Telepon tidak Valid");
@@ -74,8 +87,8 @@ const LoginForm = () =>{
             <form className="h-1/2" onSubmit={handleSubmission}>
                 <div className="flex flex-col w-full ">
                     <div className="flex flex-col w-full">
-                <label htmlFor="Babo" className="font-light text-[15px]">E-mail/No.telepon</label>
-                    <input type="text" id="Babo" required placeholder="Masukkan alamat email"
+                <label htmlFor="identifier" className="font-light text-[15px]">E-mail/No.telepon</label>
+                    <input type="text" name="identifier" required placeholder="Masukkan alamat email"
                         className="w-full border-[1.5px] border-solid border-[#B3B3B3] rounded-md text-center placeholder:font-poppins placeholder:font-light placeholder:text-[15px] placeholder:text-[#A1A0A0] mt-2" onChange={handleData} value={email||phone}></input>
                     </div>
                 </div>

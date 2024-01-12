@@ -6,16 +6,16 @@ import Greeting from "./Greetings";
 import Layanan from "./Layanan";
 import {useLocation} from 'react-router-dom'
 const Homepage = () =>{
-    const location = useLocation();
+    // const location = useLocation();
 
-    const name = location?.state?.data;
-    if(!name){
-        name = 'hacker';
-    }
+    // const name = location?.state?.data;
+    // if(!name){
+    //     name = 'hacker';
+    // }
     return(
         <div className="flex flex-col font-poppins">
             <TopBar/>
-            <Greeting name={name}/>
+            <Greeting name={'Davis'}/>
             <div className="flex justify-center items-center">
                 <StuntingPagination/>
             </div>
