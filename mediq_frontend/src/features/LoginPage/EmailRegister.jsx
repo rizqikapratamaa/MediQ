@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import BackButton from '../Assets/BackArrow.svg'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import VisibilityOn from "../Assets/visibility.svg"
 import VisibilityOff from "../Assets/visibility_off.svg"
+import axios from 'axios';
+import { forbiddenNotification } from "../toastMessage";
 
 const EmailRegister = () =>{
 
-
+    const navigate = useNavigate();
     const [nik, setNik] = useState('');
     const [email, setEmail] = useState('');
-    const [born, setBorn] = useState('');
-    const [name, setName] = useState('');
-    
-    const [jenisKelamin, setJenisKelamin] = useState(null);
+    const [birthDate, setBorn] = useState('');
+    const [fullName, setName] = useState('');
+    const role = 'patient';
+    const [gender, setJenisKelamin] = useState("");
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] =  useState("")
     const [showPassword, setShowPassword] = useState(false);
@@ -31,6 +33,7 @@ const EmailRegister = () =>{
         return true
     }
 
+
     const handlePasswordVisibility = () => {
         setShowPassword((prevShowPassword) => !prevShowPassword);
     }
@@ -38,6 +41,11 @@ const EmailRegister = () =>{
     const handlePasswordConfirmVisibility = () => {
         setShowConfirmPassword((prevShowPassword) => ! prevShowPassword);
     }
+
+    const getFormattedMinDate = () => {
+        const minDate = new Date("1900-01-01");
+        return minDate.toISOString().split("T")[0];
+      };
 
 
      const checkEmail = () => {
@@ -48,12 +56,17 @@ const EmailRegister = () =>{
         let minimumTime = getFormattedMinDate();
         let today = new Date();
         today = today.toISOString().split("T")[0];
-        if(born < minimumTime || born > today){
+        if(birthDate < minimumTime || birthDate > today){
             setBorn(minimumTime);
             alert("Tanggal Lahir Tidak Valid")
             return false;
         }
         return true;
+    }
+
+    const handeName = (value) => {
+        let selectedName = value.target.value;
+        setName(selectedName);
     }
 
     const handlePassword = (value) => {
@@ -71,13 +84,31 @@ const EmailRegister = () =>{
         }
         return true
     }
-    const handleSubmission = (event) => {
+    const handleSubmission = async(event) => {
         //Check nik
         event.preventDefault();
         if(checkEmail() && checkBorn() && checkNik() && passwordChecker()){
-            console.log("Data Success");
-        }
-        
+            try {
+                const response = await axios.post("http://localhost:8000/signup-email", {
+                    email,
+                    phoneNumber: '',
+                    gender,
+                    fullName,
+                    birthDate,
+                    nik,
+                    password,
+                    role
+                });
+
+                if(response.request.status === 200){
+                    navigate('/');
+                }
+            } catch (error) {
+                // Log the error to the console
+                // console.error(error);
+                alert(error.response.data)
+            }
+        } 
     }
 
     const handleJenisKelamin = (event) => {
@@ -88,11 +119,6 @@ const EmailRegister = () =>{
         const selectedDate = event.target.value;
         setBorn(selectedDate);
     }
-
-    const getFormattedMinDate = () => {
-        const minDate = new Date("1900-01-01");
-        return minDate.toISOString().split("T")[0];
-      };
 
 
     
@@ -117,7 +143,7 @@ const EmailRegister = () =>{
             <h1 className="font-bold text-3xl">Masukkan Identitas Diri</h1>
             <h3 className="font-light text-sm mt-4">Lengkapilah identitas diri agar Anda dapat <br></br>terhubung dengan fasilitas kesehatan yang tersedia</h3>
             <div className="w-full h-[1px] bg-black my-5"></div>
-            <form onSubmit={handleSubmission}>
+            <form onSubmit={handleSubmission} >
                 <div className="flex flex-col w-full ">
                     <div className="flex flex-col w-full">
                 <label htmlFor="Email" className="font-light text-[15px]">E-mail</label>
@@ -127,10 +153,10 @@ const EmailRegister = () =>{
                 </div>
                 <br></br>
                 <div>
-                    <label for="JenisKelamin" className="font-light text-[15px]">Jenis Kelamin</label>
+                    <label htmlFor="JenisKelamin" className="font-light text-[15px]">Jenis Kelamin</label>
                     <div className="mt-2">
-                        <select  id="JenisKelamin" required defaultValue="" onChange={handleJenisKelamin} value={jenisKelamin} className="block w-full text-center text-[#A1A0A0] font-light text-[15px] border-[1.5px] rounded-md border-solid border-[#B3B3B3] focus:outline-none ">
-                            <option disabled selected value="">Pilih Jenis Kelamin</option>
+                        <select  id="JenisKelamin" required onChange={handleJenisKelamin} value={gender} className="block w-full text-center text-[#A1A0A0] font-light text-[15px] border-[1.5px] rounded-md border-solid border-[#B3B3B3] focus:outline-none ">
+                            <option disable="true" value="">Pilih Jenis Kelamin</option>
                             <option value="Laki-Laki">Laki-Laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
@@ -140,13 +166,13 @@ const EmailRegister = () =>{
                 </br>
                 <div>
                     <label htmlFor="Names" className="font-light text-[15px]">Nama Lengkap</label>
-                    <input type="text" id="Names" required placeholder="Masukkan nama lengkap sesuai KTP"
+                    <input type="text" id="Names" required onChange={handeName} value={fullName} placeholder="Masukkan nama lengkap sesuai KTP"
                         className="w-full border-[1.5px] border-solid border-[#B3B3B3] rounded-md text-center placeholder:font-poppins placeholder:font-light placeholder:text-[15px] placeholder:text-[#A1A0A0] mt-2"></input>
                 </div>
                 <br />
                 <div className="flex-col flex font-light">
                     <label htmlFor="Dates">Tanggal Lahir</label>
-                    <input placeholder= "Masukkan tanggal lahir" type="date" autoSave className="mt-2 w-full text-[#A1A0A0] leading-tight font-light border-[1.5px] border-solid border- rounded-md text-center border-[#B3B3B3]" onChange={handleBornDate} value={born}/>
+                    <input placeholder= "Masukkan tanggal lahir" type="date" autoSave="true" className="mt-2 w-full text-[#A1A0A0] leading-tight font-light border-[1.5px] border-solid border- rounded-md text-center border-[#B3B3B3]" onChange={handleBornDate} value={birthDate}/>
                 </div> 
                 <br />
                 <div className="flex-col flex font-light">

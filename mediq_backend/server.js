@@ -6,6 +6,9 @@ const session = require('express-session');
 const app = express();
 const port = 8000;
 
+const cors = require('cors');
+app.use(cors());
+
 app.use(session({
     secret: 's3Kur3-K3y',
     resave: false,
@@ -19,13 +22,15 @@ app.use(express.json());
 
 app.set('view engine', 'ejs');
 
-
+app.get('/api', (req, res) => {
+    res.json({"users" : ["userOne","userTwo","iserThree"]})
+});
 app.use('/', router);
 router.get('/', (req, res) => {
     if (req.session.user) {
         res.redirect('/dashboard');
     } else {
-        res.sendFile(__dirname + '/public/welcome-page.html');
+        res.sendFile(__dirname + '../mediq_frontend/src/App.js');
     }
 });
 

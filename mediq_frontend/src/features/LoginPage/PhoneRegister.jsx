@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import BackButton from '../Assets/BackArrow.svg'
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import VisibilityOn from "../Assets/visibility.svg"
 import VisibilityOff from "../Assets/visibility_off.svg"
-
+import axios from "axios";
 const PhoneRegister = () =>{
 
-
+    const navigate = useNavigate();
     const [nik, setNik] = useState('');
-    const [phone, setPhone] = useState('');
-    const [born, setBorn] = useState('');
-    const [name, setName] = useState('');
-    const [jenisKelamin, setJenisKelamin] = useState(null);
+    const [phoneNumber, setPhone] = useState('');
+    const [birthDate, setBorn] = useState('');
+    const [fullName, setName] = useState('');
+    const [gender, setJenisKelamin] = useState('');
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] =  useState("")
     const [showPassword, setShowPassword] = useState(false);
@@ -33,17 +33,21 @@ const PhoneRegister = () =>{
     }
 
      const checkPhoneNumber = () => {
-        if(phone.length < 8){
+        if(phoneNumber.length < 8){
             alert("No HP Tidak Valid")
             return false;
         }
         return true;
     }
+    const handleName = (value) => {
+        let selectedName = value.target.value
+        setName(selectedName);
+    }
     const checkBorn = () => {
         let minimumTime = getFormattedMinDate();
         let today = new Date();
         today = today.toISOString().split("T")[0];
-        if(born < minimumTime || born > today){
+        if(birthDate < minimumTime || birthDate > today){
             setBorn(minimumTime);
             alert("Tanggal Lahir Tidak Valid")
             return false;
@@ -66,11 +70,28 @@ const PhoneRegister = () =>{
         }
         return true
     }
-    const handleSubmission = (event) => {
+    const handleSubmission = async(event) => {
         //Check nik
         event.preventDefault();
         if(checkPhoneNumber() && checkBorn() && checkNik() && passwordChecker()){
-            console.log("Data Success");
+            try{
+                const response = await axios.post('http://localhost:8000/signup-phone',{
+                    email : '',
+                    phoneNumber,
+                    gender,
+                    fullName,
+                    birthDate,
+                    nik,
+                    password,
+                    role : 'patient'
+                })
+                console.log(response);
+                if(response.request.status === 200){
+                    navigate('/');
+                }
+            } catch(error){
+                alert(error.response.data);
+            }
         }
     }
 
@@ -124,19 +145,19 @@ const PhoneRegister = () =>{
             <div className="w-full h-[1px] bg-black my-5"></div>
             <form onSubmit={handleSubmission}>
                 <div className="flex flex-col w-full">
-                    <label for="phone" className="font-light text-[15px]">Nomor Telepon</label>
+                    <label htmlFor="phoneNumber" className="font-light text-[15px]">Nomor Telepon</label>
                     <div className="flex flex-row mt-2">
                         <div className="border-[1.5px] border-[#B3B3B3] border-solid  rounded-l-md text-[12px] font-light w-14 items-center justify-center flex">+62</div>
-                        <input type="text" id="phone" required placeholder="Masukkan nomor telepon" onChange={handlePhoneCounter} value={phone}
+                        <input type="text" id="phoneNumber" required placeholder="Masukkan nomor telepon" onChange={handlePhoneCounter} value={phoneNumber}
                         className="w-full border-[1.5px] border-solid border-[#B3B3B3] border-l-0 rounded-r-md text-center placeholder:font-poppins placeholder:font-light placeholder:text-[15px] placeholder:text-[#A1A0A0]"></input>
                     </div>
                 </div>
                 <br></br>
                 <div>
-                    <label for="JenisKelamin" className="font-light text-[15px]">Jenis Kelamin</label>
+                    <label htmlFor="gender" className="font-light text-[15px]">Jenis Kelamin</label>
                     <div className="mt-2">
-                        <select  id="JenisKelamin" required defaultValue="" onChange={handleJenisKelamin} value={jenisKelamin} className="block w-full text-center text-[#A1A0A0] font-light text-[15px] border-[1.5px] rounded-md border-solid border-[#B3B3B3] focus:outline-none ">
-                            <option disabled selected value="">Pilih Jenis Kelamin</option>
+                        <select  id="gender" required onChange={handleJenisKelamin} value={gender} className="block w-full text-center text-[#A1A0A0] font-light text-[15px] border-[1.5px] rounded-md border-solid border-[#B3B3B3] focus:outline-none ">
+                            <option value="">Pilih Jenis Kelamin</option>
                             <option value="Laki-Laki">Laki-Laki</option>
                             <option value="Perempuan">Perempuan</option>
                         </select>
@@ -146,13 +167,13 @@ const PhoneRegister = () =>{
                 </br>
                 <div>
                     <label htmlFor="Names" className="font-light text-[15px]">Nama Lengkap</label>
-                    <input type="text" id="Names" required placeholder="Masukkan nama lengkap sesuai KTP"
+                    <input type="text" id="Names" required value={fullName} onChange={handleName}  placeholder="Masukkan nama lengkap sesuai KTP"
                         className="w-full border-[1.5px] border-solid border-[#B3B3B3] rounded-md text-center placeholder:font-poppins placeholder:font-light placeholder:text-[15px] placeholder:text-[#A1A0A0] mt-2"></input>
                 </div>
                 <br />
                 <div className="flex-col flex">
                     <label htmlFor="Dates">Tanggal Lahir</label>
-                    <input placeholder= "Masukkan tanggal lahir" type="date" autoSave className="mt-2 w-full text-[#A1A0A0] leading-tight font-light border-[1.5px] border-solid border- rounded-md text-center border-[#B3B3B3]" onChange={handleBornDate} value={born}/>
+                    <input placeholder= "Masukkan tanggal lahir" type="date" autoSave="true" className="mt-2 w-full text-[#A1A0A0] leading-tight font-light border-[1.5px] border-solid border- rounded-md text-center border-[#B3B3B3]" onChange={handleBornDate} value={birthDate}/>
                 </div> 
                 <br />
                 <div className="flex-col flex">
@@ -172,9 +193,9 @@ const PhoneRegister = () =>{
                     </div>
                     </div>
                 <div className="my-6">
-                    <label htmlFor="Password" className="font-normal text-[15px]">Konfirmasi Kata Sandi</label>
+                    <label htmlFor="ConfirmPassword" className="font-normal text-[15px]">Konfirmasi Kata Sandi</label>
                     <div className=" flex flex-row justify-center items-center">
-                    <input type={showConfirmPassword ? "text" : "password"} id="Password" required  placeholder="Masukkan Kata Sandi"
+                    <input type={showConfirmPassword ? "text" : "password"} id="ConfirmPassword" required  placeholder="Masukkan Kata Sandi"
                         className="w-full border-[1.5px] border-solid border-[#B3B3B3] rounded-md text-center placeholder:font-poppins placeholder:font-light placeholder:text-[15px] placeholder:text-[#A1A0A0] mt-2" value={confirmPassword} onChange={handleConfirmPassword}></input>
                     <button onClick={handlePasswordConfirmVisibility}>    
                         <img src={showConfirmPassword ? VisibilityOn : VisibilityOff} alt="" className="h-5 absolute right-11 -translate-y-1"/>

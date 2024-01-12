@@ -26,7 +26,7 @@
     background-size : cover;
     background-repeat : no-repeat;
   }
-.datepicker-input::~webkit-calendar-picker-indicator {
+.datepicker-input::webkit-calendar-picker-indicator {
     position: absolute;
     left: 0;
     top: 0;

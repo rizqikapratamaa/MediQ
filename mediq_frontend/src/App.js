@@ -11,9 +11,13 @@ import LoginForm from './features/LoginPage/LoginForm';
 import {BrowserRouter as Router, Routes,Route,Link, Navigate} from 'react-router-dom'
 
 import ScrollToTop from './ScrollToTop';
+import { useEffect, useState } from 'react';
+
 
 function App() {
+  
   const isAuthenticated = false;
+
   return (
     <div>
       <Router>

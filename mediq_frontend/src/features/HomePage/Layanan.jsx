@@ -11,7 +11,7 @@ const Layanan = () => {
 
     return(
         <div className="my-3 mx-10">
-            <label htmlFor="Layanan" className="font-semibold text-md">Layanan</label>
+            <label htmlFor="Layanan" className="font-semibold text-xl">Layanan</label>
 
             
             <div className="flex flex-row justify-between my-5 w-full ">

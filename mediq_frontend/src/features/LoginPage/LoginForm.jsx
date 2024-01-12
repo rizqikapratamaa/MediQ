@@ -8,6 +8,7 @@ const LoginForm = () =>{
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [role, setRole] = useState("");
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
 

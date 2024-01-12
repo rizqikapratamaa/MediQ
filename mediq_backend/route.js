@@ -2,7 +2,6 @@ const express = require('express');
 const firebase = require('firebase');
 const router = express.Router();
 
-
 const firebaseConfig = {
     apiKey: "AIzaSyBU-D4ErWsAMc9RWsP8CgT-B47EO75Ie8s",
     authDomain: "mediq-12a20.firebaseapp.com",
@@ -36,12 +35,13 @@ router.post('/signup-email', (req, res) => {
     db.collection('users').where('email', '==', email).get()
     .then((snapshot) => {
         if (!snapshot.empty) {
-            res.redirect('/signup-email?error=Email sudah terdaftar');
+            // res.status(400).json({ status: 'error', message: 'Email sudah terdaftar', field: 'email' });
+            res.status(400).send('Email sudah terdaftar');
         } else {
             db.collection('users').where('nik', '==', nik).get()
             .then((snapshot) => {
                 if (!snapshot.empty) {
-                    res.redirect('/signup-email?error=NIK sudah terdaftar');
+                    res.status(400).send('Nik sudah terdaftar');
                 } else {
                     db.collection('users').add({
                         email,
@@ -54,7 +54,7 @@ router.post('/signup-email', (req, res) => {
                         role
                     }).then((docRef) => {
                         db.collection('users').doc(docRef.id).collection('booking').add({}).then(() => {
-                            res.redirect('/login-email?message=Akun berhasil didaftarkan, silahkan login untuk melanjutkan');
+                            res.status(200).json({ status: 'success', message: 'Akun berhasil didaftarkan, silahkan login untuk melanjutkan', field: 'nik' });
                         }).catch((error) => {
                             console.error("Error adding booking collection: ", error);
                         });
@@ -86,12 +86,12 @@ router.post('/signup-phone', (req, res) => {
     db.collection('users').where('phoneNumber', '==', phoneNumber).get()
     .then((snapshot) => {
         if (!snapshot.empty) {
-            res.redirect('/signup-phone?error=Nomor telepon sudah terdaftar');
+            res.status(400).send("no telepon sudah terdaftar");
         } else {
             db.collection('users').where('nik', '==', nik).get()
             .then((snapshot) => {
                 if (!snapshot.empty) {
-                    res.redirect('/signup-phone?error=NIK sudah terdaftar');
+                    res.status(400).send('NIK sudah terdaftar');
                 } else {
                     db.collection('users').add({
                         email: '',
@@ -104,7 +104,7 @@ router.post('/signup-phone', (req, res) => {
                         role
                     }).then((docRef) => {
                         db.collection('users').doc(docRef.id).collection('booking').add({}).then(() => {
-                            res.redirect('/login-phone?message=Akun berhasil didaftarkan, silahkan login untuk melanjutkan');
+                            res.status(200).send('Akun anda sudah berhasil dibuat');
                         }).catch((error) => {
                             console.error("Error adding booking collection: ", error);
                         });
