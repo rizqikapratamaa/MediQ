@@ -41,3 +41,11 @@ By leveraging information technology in healthcare services, MediQ aims to:
 
 
 ## How To Use
+1. **Install Dependencies**:
+   - Run `npm install` in the project root directory to install the necessary dependencies.
+
+2. **Start Backend**:
+   - Run `npm run dev` to start the backend server.
+
+3. **Start Frontend**:
+   - Run `npm run start` to start the frontend application.
