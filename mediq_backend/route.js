@@ -808,4 +808,88 @@ router.post('/konsultasi-kesehatan/dokter-lansia/:doctorId/booking', async (req,
 //     }
 // });
 
+
+// router.use((req, res, next) => {
+//     if (!req.session.user) {
+//         res.redirect('/');
+//         return;
+//     }
+//     req.clinicId = req.user.clinicId; // Asumsikan clinicId tersimpan di session user
+//     next();
+// });
+
+const checkClinicAuth = (req, res, next) => {
+    if (!req.session.user || req.session.user.role !== 'clinic') {
+        res.redirect('/'); // Ganti dengan rute login yang sesuai
+    } else {
+        next();
+    }
+};
+
+router.get('/manajemen-konsultasi', checkClinicAuth, async (req, res) => {
+    const clinicUserId = req.session.user.clinicId; // Gunakan clinicUserId dari sesi pengguna
+    const db = firebase.firestore();
+
+    try {
+        const doctorsSnapshot = await db.collection('doctors').where('clinicId', '==', clinicUserId).get();
+        const doctors = [];
+
+        for (const doc of doctorsSnapshot.docs) {
+            const doctorData = doc.data();
+            
+            // Ambil schedule dari subkoleksi 'schedule'
+            const scheduleSnapshot = await db.collection('doctors').doc(doc.id).collection('schedule').get();
+            doctorData.schedule = scheduleSnapshot.docs.map(scheduleDoc => scheduleDoc.data());
+
+            doctors.push(doctorData);
+        }
+
+        // Render halaman manajemen konsultasi dengan data dokter
+        res.render('manajemen-konsultasi', { doctors: doctors, user: req.session.user });
+    } catch (error) {
+        console.error("Error getting doctors: ", error);
+        res.status(500).send("Error getting doctors");
+    }
+});
+
+router.get('/tambah-dokter', checkClinicAuth, (req, res) => {
+    res.render('tambah-dokter', { user: req.session.user });
+});
+
+router.post('/tambah-dokter', checkClinicAuth, async (req, res) => {
+    const { bidang, experience, id, name, price, rating } = req.body;
+    const clinicUserId = req.session.user.uid;
+
+    const db = firebase.firestore();
+
+    try {
+        const existingDoctor = await db.collection('doctors').where('id', '==', id).get();
+
+        if (!existingDoctor.empty) {
+            return res.status(400).send('ID sudah dipakai oleh dokter lain.');
+        }
+
+        const idRegex = /^MQ-\d{7}$/;
+        if (!idRegex.test(id)) {
+            return res.status(400).send('Format ID tidak sesuai. Harap gunakan format "MQ-<7 angka>".');
+        }
+
+        await db.collection('doctors').doc(id).set({
+            bidang,
+            experience,
+            id,
+            name,
+            price,
+            rating,
+            clinicId: clinicUserId,
+            schedule: []
+        });
+
+        res.redirect('/manajemen-konsultasi');
+    } catch (error) {
+        console.error("Error adding doctor: ", error);
+        res.status(500).send("Error adding doctor");
+    }
+});
+
 module.exports = router;

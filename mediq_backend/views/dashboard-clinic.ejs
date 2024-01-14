@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Homepage</title>
+    <title>Dashboard Klinik</title>
+    <!-- Tambahkan CSS dan JavaScript sesuai kebutuhan -->
 </head>
 <body>
-    <h1>Halo, <%= user.fullName %></h1>
-    <p>Selamat datang di MediQ untuk Klinik!</p>
+    <h1>Selamat Datang!</h1>
+    <h2><%= user.fullName %></h2>
+    <p>ID Klinik: <%= user.clinicId %></p>
+    
+    <div>
+        <form action="/periksa-antrian" method="get">
+            <button type="submit">Periksa Antrian Pasien</button>
+        </form>
+        <form action="/manajemen-konsultasi" method="get">
+            <button type="submit">Manajemen Konsultasi Online</button>
+        </form>
+    </div>
 
     <p>
         <form action="/logout" method="post">
-            <input type="submit" value="Logout">
+            <button type="submit">Logout</button>
         </form>
     </p>
 </body>
