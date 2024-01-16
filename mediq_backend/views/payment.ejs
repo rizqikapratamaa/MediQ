@@ -1,0 +1,41 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembayaran</title>
+</head>
+<body>
+    <h1>Pembayaran</h1>
+    <h2>Rincian Pembayaran</h2>
+    <h3><%= doctor.name %></h3>
+    <p>Dokter <%= doctor.bidang %></p>
+    <p>Lokasi Praktek: <%= clinicName %></p>
+
+    <form action="<%= '/konsultasi-kesehatan/' + (doctor.bidang == 'umum' ? 'dokter-umum' : doctor.bidang == 'anak dan remaja' ? 'dokter-anak-remaja': doctor.bidang == 'gigi dan mulut' ? 'dokter-gigi-mulut': doctor.bidang == 'lansia' ? 'dokter-lansia' : doctor.bidang == 'ibu dan kb' ? 'dokter-ibu-kb' : doctor.bidang == 'gizi' ? 'dokter-gizi' : '') + '/' + encodeURIComponent(doctor.id) + '/pembayaran/success' %>" method="post">
+        <label>
+            <input type="radio" name="paymentMethod" value="creditCard">
+            Kartu Kredit
+        </label>
+        <label>
+            <input type="radio" name="paymentMethod" value="bankTransfer">
+            Transfer Bank
+        </label>
+        <label>
+            <input type="radio" name="paymentMethod" value="wallet">
+            Dompet Digital
+        </label>
+        
+        <button type="submit">Bayar</button>
+    </form>
+
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            alert('Pembayaran Berhasil!');
+            window.location.href = '/dashboard';
+        });
+    </script>
+</body>
+</html> -->

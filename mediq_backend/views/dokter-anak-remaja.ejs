@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Layanan Gigi dan Mulut</title>
+    <title>Dokter Anak dan Remaja</title>
     <style>
         .doctor-info {
             line-height: 0.5;
@@ -9,7 +9,7 @@
     </style>
 </head>
 <body>
-    <h1>Layanan Gigi dan Mulut</h1>
+    <h1>Dokter Anak dan Remaja</h1>
     <% if (doctors.length > 0) { %>
         <% doctors.forEach(function(doctor) { %>
             <div class="doctor-info">
@@ -18,10 +18,11 @@
                 <p>Pengalaman: <%= doctor.experience %> tahun</p>
                 <p>Harga: <%= doctor.price %></p>
                 <p>Rating: <%= doctor.rating %></p>
+                <p><a href="/konsultasi-kesehatan/dokter-anak-remaja/<%= encodeURIComponent(doctor.id) %>"> Lihat jadwal</a></p>
             </div>
         <% }); %>
     <% } else { %>
-        <p>Belum ada dokter gigi dan mulut yang tersedia.</p>
+        <p>Belum ada dokter anak dan remaja yang tersedia.</p>
     <% } %>
 </body>
 </html>

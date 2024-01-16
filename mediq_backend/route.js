@@ -1,6 +1,7 @@
 const express = require('express');
 const firebase = require('firebase');
 const router = express.Router();
+const moment = require('moment-timezone');
 
 const firebaseConfig = {
     apiKey: "AIzaSyBU-D4ErWsAMc9RWsP8CgT-B47EO75Ie8s",
@@ -209,227 +210,686 @@ router.get('/konsultasi-kesehatan', (req, res) => {
     res.sendFile(__dirname + '/public/konsultasi-kesehatan.html');
 });
 
-router.get('/konsultasi-kesehatan/layanan-umum', (req, res) => {
+router.get('/konsultasi-kesehatan/dokter-umum', (req, res) => {
     if (!req.session.user){
         res.redirect('/');
         return;
     }
     let doctors = [];
     const db = firebase.firestore();
-    db.collection('users').where('role', '==', 'clinic').get()
+    db.collection('doctors').where('bidang', '==', 'umum').get()
         .then((querySnapshot) => {
-            let promises = [];
             querySnapshot.forEach((doc) => {
-                let promise = db.collection('users').doc(doc.id).collection('doctor').where('bidang', '==', 'umum').get()
-                    .then((subQuerySnapshot) => {
-                        subQuerySnapshot.forEach((subDoc) => {
-                            doctors.push(subDoc.data());
-                        });
-                    });
-                promises.push(promise);
+                doctors.push(doc.data());
             });
-            return Promise.all(promises);
-        })
-        .then(() => {
-            res.render('layanan-umum', { doctors: doctors });
+            res.render('dokter-umum', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
         });
 });
 
-router.get('/konsultasi-kesehatan/layanan-gigi-mulut', (req, res) => {
+
+router.get('/konsultasi-kesehatan/dokter-gigi-mulut', (req, res) => {
     if (!req.session.user){
         res.redirect('/');
         return;
     }
     let doctors = [];
     const db = firebase.firestore();
-    db.collection('users').where('role', '==', 'clinic').get()
+    db.collection('doctors').where('bidang', '==', 'gigi mulut').get()
         .then((querySnapshot) => {
-            let promises = [];
             querySnapshot.forEach((doc) => {
-                let promise = db.collection('users').doc(doc.id).collection('doctor').where('bidang', '==', 'gigi dan mulut').get()
-                    .then((subQuerySnapshot) => {
-                        subQuerySnapshot.forEach((subDoc) => {
-                            doctors.push(subDoc.data());
-                        });
-                    });
-                promises.push(promise);
+                doctors.push(doc.data());
             });
-            return Promise.all(promises);
-        })
-        .then(() => {
-            res.render('layanan-gigi-mulut', { doctors: doctors });
+            res.render('dokter-gigi-mulut', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
         });
 });
 
-router.get('/konsultasi-kesehatan/layanan-anak-remaja', (req, res) => {
+router.get('/konsultasi-kesehatan/dokter-anak-remaja', (req, res) => {
     if (!req.session.user){
         res.redirect('/');
         return;
     }
     let doctors = [];
     const db = firebase.firestore();
-    db.collection('users').where('role', '==', 'clinic').get()
+    db.collection('doctors').where('bidang', '==', 'anak dan remaja').get()
         .then((querySnapshot) => {
-            let promises = [];
             querySnapshot.forEach((doc) => {
-                let promise = db.collection('users').doc(doc.id).collection('doctor').where('bidang', '==', 'anak dan remaja').get()
-                    .then((subQuerySnapshot) => {
-                        subQuerySnapshot.forEach((subDoc) => {
-                            doctors.push(subDoc.data());
-                        });
-                    });
-                promises.push(promise);
+                doctors.push(doc.data());
             });
-            return Promise.all(promises);
-        })
-        .then(() => {
-            res.render('layanan-anak-remaja', { doctors: doctors });
+            res.render('dokter-anak-remaja', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
         });
 });
 
-router.get('/konsultasi-kesehatan/layanan-ibu-kb', (req, res) => {
+router.get('/konsultasi-kesehatan/dokter-ibu-kb', (req, res) => {
     if (!req.session.user){
         res.redirect('/');
         return;
     }
     let doctors = [];
     const db = firebase.firestore();
-    db.collection('users').where('role', '==', 'clinic').get()
+    db.collection('doctors').where('bidang', '==', 'ibu dan kb').get()
         .then((querySnapshot) => {
-            let promises = [];
             querySnapshot.forEach((doc) => {
-                let promise = db.collection('users').doc(doc.id).collection('doctor').where('bidang', '==', 'ibu dan kb').get()
-                    .then((subQuerySnapshot) => {
-                        subQuerySnapshot.forEach((subDoc) => {
-                            doctors.push(subDoc.data());
-                        });
-                    });
-                promises.push(promise);
+                doctors.push(doc.data());
             });
-            return Promise.all(promises);
-        })
-        .then(() => {
-            res.render('layanan-ibu-kb', { doctors: doctors });
+            res.render('dokter-ibu-kb', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
         });
 });
 
-router.get('/konsultasi-kesehatan/layanan-lansia', (req, res) => {
+router.get('/konsultasi-kesehatan/dokter-lansia', (req, res) => {
     if (!req.session.user){
         res.redirect('/');
         return;
     }
     let doctors = [];
     const db = firebase.firestore();
-    db.collection('users').where('role', '==', 'clinic').get()
+    db.collection('doctors').where('bidang', '==', 'lansia').get()
         .then((querySnapshot) => {
-            let promises = [];
             querySnapshot.forEach((doc) => {
-                let promise = db.collection('users').doc(doc.id).collection('doctor').where('bidang', '==', 'lansia').get()
-                    .then((subQuerySnapshot) => {
-                        subQuerySnapshot.forEach((subDoc) => {
-                            doctors.push(subDoc.data());
-                        });
-                    });
-                promises.push(promise);
+                doctors.push(doc.data());
             });
-            return Promise.all(promises);
-        })
-        .then(() => {
-            res.render('layanan-lansia', { doctors: doctors });
+            res.render('dokter-lansia', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
         });
 });
 
-router.get('/konsultasi-kesehatan/layanan-umum/:doctorId', (req, res) => {
-    if (!req.session.user){
+router.get('/konsultasi-kesehatan/dokter-umum/:doctorId', (req, res) => {
+    if (!req.session.user) {
         res.redirect('/');
         return;
     }
-    let doctors = [];
+    
     const doctorId = req.params.doctorId;
     const db = firebase.firestore();
-    db.collection('users').where('role', '==', 'clinic').get()
+
+    db.collection('doctors').where('id', '==', doctorId).get()
         .then((querySnapshot) => {
-            let promises = [];
-            querySnapshot.forEach((doc) => {
-                let promise = db.collection('users').doc(doc.id).collection('doctor').where('id', '==', doctorId).get()
-                    .then((subQuerySnapshot) => {
-                        subQuerySnapshot.forEach((subDoc) => {
-                            doctors.push(subDoc.data());
-                        });
-                    });
-                promises.push(promise);
-            });
-            return Promise.all(promises);
-        })
-        .then(() => {
+            const doctors = querySnapshot.docs.map((doc) => doc.data());
             res.render('pilih-jadwal-dokter', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
+            res.status(500).send("Error getting data");
         });
 });
 
-router.post('/konsultasi-kesehatan/layanan-umum/:doctorId/booking', (req, res) => {
+router.get('/konsultasi-kesehatan/dokter-gigi-mulut/:doctorId', (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    
+    const doctorId = req.params.doctorId;
+    const db = firebase.firestore();
+
+    db.collection('doctors').where('id', '==', doctorId).get()
+        .then((querySnapshot) => {
+            const doctors = querySnapshot.docs.map((doc) => doc.data());
+            res.render('pilih-jadwal-dokter', { doctors: doctors });
+        })
+        .catch((error) => {
+            console.error("Error getting data: ", error);
+            res.status(500).send("Error getting data");
+        });
+});
+
+router.get('/konsultasi-kesehatan/dokter-anak-remaja/:doctorId', (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    
+    const doctorId = req.params.doctorId;
+    const db = firebase.firestore();
+
+    db.collection('doctors').where('id', '==', doctorId).get()
+        .then((querySnapshot) => {
+            const doctors = querySnapshot.docs.map((doc) => doc.data());
+            res.render('pilih-jadwal-dokter', { doctors: doctors });
+        })
+        .catch((error) => {
+            console.error("Error getting data: ", error);
+            res.status(500).send("Error getting data");
+        });
+});
+
+router.get('/konsultasi-kesehatan/dokter-gizi/:doctorId', (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    
+    const doctorId = req.params.doctorId;
+    const db = firebase.firestore();
+
+    db.collection('doctors').where('id', '==', doctorId).get()
+        .then((querySnapshot) => {
+            const doctors = querySnapshot.docs.map((doc) => doc.data());
+            res.render('pilih-jadwal-dokter', { doctors: doctors });
+        })
+        .catch((error) => {
+            console.error("Error getting data: ", error);
+            res.status(500).send("Error getting data");
+        });
+});
+
+router.get('/konsultasi-kesehatan/dokter-ibu-kb/:doctorId', (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    
+    const doctorId = req.params.doctorId;
+    const db = firebase.firestore();
+
+    db.collection('doctors').where('id', '==', doctorId).get()
+        .then((querySnapshot) => {
+            const doctors = querySnapshot.docs.map((doc) => doc.data());
+            res.render('pilih-jadwal-dokter', { doctors: doctors });
+        })
+        .catch((error) => {
+            console.error("Error getting data: ", error);
+            res.status(500).send("Error getting data");
+        });
+});
+
+router.get('/konsultasi-kesehatan/dokter-lansia/:doctorId', (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    
+    const doctorId = req.params.doctorId;
+    const db = firebase.firestore();
+
+    db.collection('doctors').where('id', '==', doctorId).get()
+        .then((querySnapshot) => {
+            const doctors = querySnapshot.docs.map((doc) => doc.data());
+            res.render('pilih-jadwal-dokter', { doctors: doctors });
+        })
+        .catch((error) => {
+            console.error("Error getting data: ", error);
+            res.status(500).send("Error getting data");
+        });
+});
+
+
+router.post('/konsultasi-kesehatan/dokter-umum/:doctorId/booking', async (req, res) => {
     if (!req.session.user) {
         res.redirect('/');
         return;
     }
 
-    const userId = req.session.user.id;
+    const userNIK = req.session.user.nik;
     const doctorId = req.params.doctorId;
     const { tanggal, waktu } = req.body;
+    const timezone = 'Asia/Jakarta';
 
     const db = firebase.firestore();
 
-    const doctorRef = db.collection('users').doc(doctorId).collection('doctor').doc(doctorId);
-    doctorRef.get()
-        .then((doctorDoc) => {
-            const doctorData = doctorDoc.data();
-            const doctorName = doctorData.name;
-            const bidangDokter = doctorData.bidang;
-            const idDoctor = doctorData.id;
+    try {
+        const doctorRef = db.collection('doctors').doc(doctorId);
+        const doc = await doctorRef.get();
 
-            const doctorScheduleRef = doctorRef.collection('schedule').add({
-                pasien: req.session.user.fullName,
-                tanggal: new Date(tanggal), // Ubah ke dalam format timestamp jika perlu
-                waktu: waktu,
-                nik: req.session.user.nik
-            });
+        if (!doc.exists) {
+            res.status(404).send('Dokter tidak ditemukan.');
+            return;
+        }
 
-            // Menambahkan jadwal ke koleksi booking pengguna
-            const userBookingRef = db.collection('users').doc(userId).collection('booking').add({
-                doctorName: doctorName,
-                bidangDokter: bidangDokter,
-                tanggal: new Date(tanggal),
-                waktu: waktu,
-                id: idDoctor
-            });
+        const doctorData = doc.data();
+        const doctorName = doctorData.name;
+        const doctorBidang = doctorData.bidang;
 
-            // Menunggu kedua operasi selesai sebelum memberikan respons
-            return Promise.all([doctorScheduleRef, userBookingRef]);
-        })
-        .then(() => {
-            res.redirect('/');
-        })
-        .catch((error) => {
-            console.error("Error handling booking:", error);
-            res.status(500).send('Terjadi kesalahan.');
+        const datetime = moment.tz(`${tanggal} ${waktu}`, 'YYYY-MM-DD HH:mm', timezone);
+        const timestamp = datetime.toDate();
+
+        await doctorRef.collection('schedule').add({
+            pasien: req.session.user.fullName,
+            nikPasien: userNIK,
+            tanggal: timestamp,
+            waktu: waktu,
         });
+
+        const userDocRef = db.collection('users').where('nik', '==', userNIK);
+        const userQuerySnapshot = await userDocRef.get();
+
+        if (userQuerySnapshot.empty) {
+            throw new Error('Pengguna dengan NIK tersebut tidak ditemukan.');
+        }
+
+        const userDoc = userQuerySnapshot.docs[0].ref;
+        await userDoc.collection('booking').add({
+            doctorName: doctorName,
+            doctorBidang: doctorBidang,
+            tanggal: timestamp,
+            waktu: waktu,
+            doctorId: doctorId
+        });
+
+        res.redirect('/dashboard');
+    } catch (error) {
+        res.status(500).send('Terjadi kesalahan.');
+    }
+});
+
+router.post('/konsultasi-kesehatan/dokter-anak-remaja/:doctorId/booking', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const userNIK = req.session.user.nik;
+    const doctorId = req.params.doctorId;
+    const { tanggal, waktu } = req.body;
+    const timezone = 'Asia/Jakarta';
+
+    const db = firebase.firestore();
+
+    try {
+        const doctorRef = db.collection('doctors').doc(doctorId);
+        const doc = await doctorRef.get();
+
+        if (!doc.exists) {
+            res.status(404).send('Dokter tidak ditemukan.');
+            return;
+        }
+
+        const doctorData = doc.data();
+        const doctorName = doctorData.name;
+        const doctorBidang = doctorData.bidang;
+
+        const datetime = moment.tz(`${tanggal} ${waktu}`, 'YYYY-MM-DD HH:mm', timezone);
+        const timestamp = datetime.toDate();
+
+        await doctorRef.collection('schedule').add({
+            pasien: req.session.user.fullName,
+            nikPasien: userNIK,
+            tanggal: timestamp,
+            waktu: waktu,
+        });
+
+        const userDocRef = db.collection('users').where('nik', '==', userNIK);
+        const userQuerySnapshot = await userDocRef.get();
+
+        if (userQuerySnapshot.empty) {
+            throw new Error('Pengguna dengan NIK tersebut tidak ditemukan.');
+        }
+
+        const userDoc = userQuerySnapshot.docs[0].ref;
+        await userDoc.collection('booking').add({
+            doctorName: doctorName,
+            doctorBidang: doctorBidang,
+            tanggal: timestamp,
+            waktu: waktu,
+            doctorId: doctorId
+        });
+
+        res.redirect('/dashboard');
+    } catch (error) {
+        res.status(500).send('Terjadi kesalahan.');
+    }
+});
+
+router.post('/konsultasi-kesehatan/dokter-gigi-mulut/:doctorId/booking', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const userNIK = req.session.user.nik;
+    const doctorId = req.params.doctorId;
+    const { tanggal, waktu } = req.body;
+    const timezone = 'Asia/Jakarta';
+
+    const db = firebase.firestore();
+
+    try {
+        const doctorRef = db.collection('doctors').doc(doctorId);
+        const doc = await doctorRef.get();
+
+        if (!doc.exists) {
+            res.status(404).send('Dokter tidak ditemukan.');
+            return;
+        }
+
+        const doctorData = doc.data();
+        const doctorName = doctorData.name;
+        const doctorBidang = doctorData.bidang;
+
+        const datetime = moment.tz(`${tanggal} ${waktu}`, 'YYYY-MM-DD HH:mm', timezone);
+        const timestamp = datetime.toDate();
+
+        await doctorRef.collection('schedule').add({
+            pasien: req.session.user.fullName,
+            nikPasien: userNIK,
+            tanggal: timestamp,
+            waktu: waktu,
+        });
+
+        const userDocRef = db.collection('users').where('nik', '==', userNIK);
+        const userQuerySnapshot = await userDocRef.get();
+
+        if (userQuerySnapshot.empty) {
+            throw new Error('Pengguna dengan NIK tersebut tidak ditemukan.');
+        }
+
+        const userDoc = userQuerySnapshot.docs[0].ref;
+        await userDoc.collection('booking').add({
+            doctorName: doctorName,
+            doctorBidang: doctorBidang,
+            tanggal: timestamp,
+            waktu: waktu,
+            doctorId: doctorId
+        });
+
+        res.redirect('/dashboard');
+    } catch (error) {
+        res.status(500).send('Terjadi kesalahan.');
+    }
+});
+
+router.post('/konsultasi-kesehatan/dokter-gizi/:doctorId/booking', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const userNIK = req.session.user.nik;
+    const doctorId = req.params.doctorId;
+    const { tanggal, waktu } = req.body;
+    const timezone = 'Asia/Jakarta';
+
+    const db = firebase.firestore();
+
+    try {
+        const doctorRef = db.collection('doctors').doc(doctorId);
+        const doc = await doctorRef.get();
+
+        if (!doc.exists) {
+            res.status(404).send('Dokter tidak ditemukan.');
+            return;
+        }
+
+        const doctorData = doc.data();
+        const doctorName = doctorData.name;
+        const doctorBidang = doctorData.bidang;
+
+        const datetime = moment.tz(`${tanggal} ${waktu}`, 'YYYY-MM-DD HH:mm', timezone);
+        const timestamp = datetime.toDate();
+
+        await doctorRef.collection('schedule').add({
+            pasien: req.session.user.fullName,
+            nikPasien: userNIK,
+            tanggal: timestamp,
+            waktu: waktu,
+        });
+
+        const userDocRef = db.collection('users').where('nik', '==', userNIK);
+        const userQuerySnapshot = await userDocRef.get();
+
+        if (userQuerySnapshot.empty) {
+            throw new Error('Pengguna dengan NIK tersebut tidak ditemukan.');
+        }
+
+        const userDoc = userQuerySnapshot.docs[0].ref;
+        await userDoc.collection('booking').add({
+            doctorName: doctorName,
+            doctorBidang: doctorBidang,
+            tanggal: timestamp,
+            waktu: waktu,
+            doctorId: doctorId
+        });
+
+        res.redirect('/dashboard');
+    } catch (error) {
+        res.status(500).send('Terjadi kesalahan.');
+    }
+});
+
+router.post('/konsultasi-kesehatan/dokter-ibu-kb/:doctorId/booking', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const userNIK = req.session.user.nik;
+    const doctorId = req.params.doctorId;
+    const { tanggal, waktu } = req.body;
+    const timezone = 'Asia/Jakarta';
+
+    const db = firebase.firestore();
+
+    try {
+        const doctorRef = db.collection('doctors').doc(doctorId);
+        const doc = await doctorRef.get();
+
+        if (!doc.exists) {
+            res.status(404).send('Dokter tidak ditemukan.');
+            return;
+        }
+
+        const doctorData = doc.data();
+        const doctorName = doctorData.name;
+        const doctorBidang = doctorData.bidang;
+
+        const datetime = moment.tz(`${tanggal} ${waktu}`, 'YYYY-MM-DD HH:mm', timezone);
+        const timestamp = datetime.toDate();
+
+        await doctorRef.collection('schedule').add({
+            pasien: req.session.user.fullName,
+            nikPasien: userNIK,
+            tanggal: timestamp,
+            waktu: waktu,
+        });
+
+        const userDocRef = db.collection('users').where('nik', '==', userNIK);
+        const userQuerySnapshot = await userDocRef.get();
+
+        if (userQuerySnapshot.empty) {
+            throw new Error('Pengguna dengan NIK tersebut tidak ditemukan.');
+        }
+
+        const userDoc = userQuerySnapshot.docs[0].ref;
+        await userDoc.collection('booking').add({
+            doctorName: doctorName,
+            doctorBidang: doctorBidang,
+            tanggal: timestamp,
+            waktu: waktu,
+            doctorId: doctorId
+        });
+
+        res.redirect('/dashboard');
+    } catch (error) {
+        res.status(500).send('Terjadi kesalahan.');
+    }
+});
+
+router.post('/konsultasi-kesehatan/dokter-lansia/:doctorId/booking', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const userNIK = req.session.user.nik;
+    const doctorId = req.params.doctorId;
+    const { tanggal, waktu } = req.body;
+    const timezone = 'Asia/Jakarta';
+
+    const db = firebase.firestore();
+
+    try {
+        const doctorRef = db.collection('doctors').doc(doctorId);
+        const doc = await doctorRef.get();
+
+        if (!doc.exists) {
+            res.status(404).send('Dokter tidak ditemukan.');
+            return;
+        }
+
+        const doctorData = doc.data();
+        const doctorName = doctorData.name;
+        const doctorBidang = doctorData.bidang;
+
+        const datetime = moment.tz(`${tanggal} ${waktu}`, 'YYYY-MM-DD HH:mm', timezone);
+        const timestamp = datetime.toDate();
+
+        await doctorRef.collection('schedule').add({
+            pasien: req.session.user.fullName,
+            nikPasien: userNIK,
+            tanggal: timestamp,
+            waktu: waktu,
+        });
+
+        const userDocRef = db.collection('users').where('nik', '==', userNIK);
+        const userQuerySnapshot = await userDocRef.get();
+
+        if (userQuerySnapshot.empty) {
+            throw new Error('Pengguna dengan NIK tersebut tidak ditemukan.');
+        }
+
+        const userDoc = userQuerySnapshot.docs[0].ref;
+        await userDoc.collection('booking').add({
+            doctorName: doctorName,
+            doctorBidang: doctorBidang,
+            tanggal: timestamp,
+            waktu: waktu,
+            doctorId: doctorId
+        });
+
+        res.redirect('/dashboard');
+    } catch (error) {
+        res.status(500).send('Terjadi kesalahan.');
+    }
+});
+
+// router.post('/process-payment', async (req, res) => {
+//     const paymentMethod = req.body.paymentMethod;
+//     const doctorId = req.params.doctorId;
+//     const db = firebase.firestore();
+
+//     try {
+//         const doctorRef = db.collection('doctors').doc(doctorId);
+//         const doctorDoc = await doctorRef.get();
+//         if (!doctorDoc.exists) {
+//             return res.status(404).send('Dokter tidak ditemukan.');
+//         }
+//         const doctorData = doctorDoc.data();
+
+//         const clinicRef = db.collection('users').doc(doctorData.clinicId);
+//         const clinicDoc = await clinicRef.get();
+//         if (!clinicDoc.exists || clinicDoc.data().role !== 'clinic') {
+//             return res.status(404).send('Klinik tidak ditemukan.');
+//         }
+//         const clinicData = clinicDoc.data();
+
+//         console.log(`Memproses pembayaran menggunakan metode: ${paymentMethod}`);
+
+//         res.render('payment-confirmation', {
+//             doctor: doctorData,
+//             clinicName: clinicData.fullName,
+//             paymentMethod: paymentMethod
+//         });
+//     } catch (error) {
+//         console.error('Error processing payment:', error);
+//         res.status(500).send('Terjadi kesalahan saat memproses pembayaran.');
+//     }
+// });
+
+
+// router.use((req, res, next) => {
+//     if (!req.session.user) {
+//         res.redirect('/');
+//         return;
+//     }
+//     req.clinicId = req.user.clinicId; // Asumsikan clinicId tersimpan di session user
+//     next();
+// });
+
+const checkClinicAuth = (req, res, next) => {
+    if (!req.session.user || req.session.user.role !== 'clinic') {
+        res.redirect('/'); // Ganti dengan rute login yang sesuai
+    } else {
+        next();
+    }
+};
+
+router.get('/manajemen-konsultasi', checkClinicAuth, async (req, res) => {
+    const clinicUserId = req.session.user.clinicId; // Gunakan clinicUserId dari sesi pengguna
+    const db = firebase.firestore();
+
+    try {
+        const doctorsSnapshot = await db.collection('doctors').where('clinicId', '==', clinicUserId).get();
+        const doctors = [];
+
+        for (const doc of doctorsSnapshot.docs) {
+            const doctorData = doc.data();
+            
+            // Ambil schedule dari subkoleksi 'schedule'
+            const scheduleSnapshot = await db.collection('doctors').doc(doc.id).collection('schedule').get();
+            doctorData.schedule = scheduleSnapshot.docs.map(scheduleDoc => scheduleDoc.data());
+
+            doctors.push(doctorData);
+        }
+
+        // Render halaman manajemen konsultasi dengan data dokter
+        res.render('manajemen-konsultasi', { doctors: doctors, user: req.session.user });
+    } catch (error) {
+        console.error("Error getting doctors: ", error);
+        res.status(500).send("Error getting doctors");
+    }
+});
+
+router.get('/tambah-dokter', checkClinicAuth, (req, res) => {
+    res.render('tambah-dokter', { user: req.session.user });
+});
+
+router.post('/tambah-dokter', checkClinicAuth, async (req, res) => {
+    const { bidang, experience, id, name, price, rating } = req.body;
+    const clinicUserId = req.session.user.uid;
+
+    const db = firebase.firestore();
+
+    try {
+        const existingDoctor = await db.collection('doctors').where('id', '==', id).get();
+
+        if (!existingDoctor.empty) {
+            return res.status(400).send('ID sudah dipakai oleh dokter lain.');
+        }
+
+        const idRegex = /^MQ-\d{7}$/;
+        if (!idRegex.test(id)) {
+            return res.status(400).send('Format ID tidak sesuai. Harap gunakan format "MQ-<7 angka>".');
+        }
+
+        await db.collection('doctors').doc(id).set({
+            bidang,
+            experience,
+            id,
+            name,
+            price,
+            rating,
+            clinicId: clinicUserId,
+            schedule: []
+        });
+
+        res.redirect('/manajemen-konsultasi');
+    } catch (error) {
+        console.error("Error adding doctor: ", error);
+        res.status(500).send("Error adding doctor");
+    }
 });
 
 module.exports = router;

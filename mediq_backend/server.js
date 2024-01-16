@@ -27,8 +27,8 @@ router.get('/', (req, res) => {
     if (req.session.user) {
         res.redirect('/dashboard');
     } else {
-        res.sendFile(__dirname + '../mediq_frontend/src/App.js');
-        // res.sendFile(__dirname + '/public/welcome-page.html');
+        // res.sendFile(__dirname + '../mediq_frontend/src/App.js');
+        res.sendFile(__dirname + '/public/welcome-page.html');
     }
 });
 

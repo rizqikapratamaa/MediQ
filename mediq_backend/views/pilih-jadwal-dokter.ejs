@@ -2,6 +2,25 @@
 <html>
 <head>
     <title>Pilih Jadwal</title>
+    <script>
+        function setDefaultTimezone() {
+            var timeInputs = document.querySelectorAll('input[type="time"]');
+            var offset = new Date().getTimezoneOffset();
+            var timezone = 'Asia/Jakarta';
+            var offsetJakarta = -420;
+
+            timeInputs.forEach(function(input) {
+                if (offset !== offsetJakarta) {
+                    var currentTime = new Date();
+                    var hours = currentTime.getHours();
+                    var minutes = currentTime.getMinutes();
+                    input.value = hours + ':' + minutes;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', setDefaultTimezone);
+    </script>
 </head>
 <body>
     <h1>Pilih Jadwal Konsultasi</h1>
@@ -9,7 +28,7 @@
         <% doctors.forEach(function(doctor) { %>
             <div class="doctor-info">
                 <h2><%= doctor.name %></h2>
-                <form action="/konsultasi-kesehatan/layanan-umum/<%= encodeURIComponent(doctor.id) %>/booking" method="post">
+                <form action="<%= '/konsultasi-kesehatan/' + (doctor.bidang == 'umum' ? 'dokter-umum' : doctor.bidang == 'anak dan remaja' ? 'dokter-anak-remaja': doctor.bidang == 'gigi dan mulut' ? 'dokter-gigi-mulut': doctor.bidang == 'lansia' ? 'dokter-lansia' : doctor.bidang == 'ibu dan kb' ? 'dokter-ibu-kb' : doctor.bidang == 'gizi' ? 'dokter-gizi' : '') + '/' + encodeURIComponent(doctor.id) + '/booking' %>" method="post" method="post">
                     <label for="tanggal">Pilih Tanggal:</label>
                     <input type="date" id="tanggal" name="tanggal" required><br>
         
@@ -21,7 +40,8 @@
             </div>
         <% }); %>
     <% } else { %>
-        <p>Belum ada dokter umum yang tersedia.</p>
+        <p>Belum ada dokter yang tersedia.</p>
     <% } %>
+    
 </body>
 </html>

@@ -1,6 +1,8 @@
 # MediQ - Beyond the Clinic Walls
 
-![MediQ Logo](logo.svg)
+<div align="center">
+  <img src="mediq_Logo.png" alt="mediQ Logo" />
+</div>
 
 ## Introduction
 

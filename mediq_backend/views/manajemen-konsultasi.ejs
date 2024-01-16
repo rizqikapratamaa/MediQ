@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Manajemen Konsultasi</title>
+</head>
+<body>
+    <h1>Manajemen Konsultasi</h1>
+    <a href="/tambah-dokter" class="button">Tambah Dokter</a>
+    <% if (doctors && doctors.length > 0) { %>
+        <% doctors.forEach(function(doctor) { %>
+            <div class="doctor-schedule">
+                <h2><%= doctor.name %></h2>
+                <% if (doctor.schedule && doctor.schedule.length > 0) { %>
+                    <ul>
+                        <% doctor.schedule.forEach(function(appointment) { %>
+                            <% if (appointment.pasien) { %>
+                                <li>
+                                    Pasien: <%= appointment.pasien %><br>
+                                    Waktu: <%= appointment.waktu %><br>
+                                    Tanggal: <%= appointment.tanggal.toDate().toLocaleDateString() %>
+                                </li>
+                            <% } %>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>Tidak ada jadwal konsultasi.</p>
+                <% } %>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>Tidak ada dokter yang terdaftar di klinik ini.</p>
+    <% } %>
+</body>
+</html>
