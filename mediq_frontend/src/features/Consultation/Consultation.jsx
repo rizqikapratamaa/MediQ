@@ -33,7 +33,7 @@ const Consultation = () => {
                 <h1 className="font-semibold text-2xl mb-7">Pilih Jenis Layanan Konsultasi</h1>
                 <SearchBar text={'Cari jenis layanan konsultasi'} onSearch={handleSearch}/>
                 <div className="w-full my-12"></div>
-                <PilihanLayanan detailLayanan={dummyLayanan} searchedValue={data}/>
+                <PilihanLayanan detailLayanan={dummyLayanan} searchedValue={data} id={0}/>
             </div>
         </div>
     );

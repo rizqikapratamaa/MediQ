@@ -16,7 +16,7 @@ const SearchBar = ({text, onSearch}) =>{
             value={searchText} 
             onChange = {handleInputChange}
             placeholder={text}
-            className="border-2 border-[#F21F61] rounded-full h-12 w-full px-5 text-[#F64E82] focus:outline-none placeholder:text-[#F64E82] placeholder:font-poppins"/>
+            className="border-2 border-[#F21F61] rounded-full h-10 w-full px-5 text-[#F64E82] focus:outline-none placeholder:text-[#F64E82] placeholder:font-poppins text-center text-sm"/>
             <img src={searchLogo} alt="Search Logo" className="w-8 absolute right-14"/>
         </div>
     )

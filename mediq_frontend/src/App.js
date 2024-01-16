@@ -9,15 +9,20 @@ import EmailRegister from './features/LoginPage/EmailRegister';
 import PembayaranHomepage from './features/Pembayaran/PembayaranHomepage';
 import LoginForm from './features/LoginPage/LoginForm';
 import ClinicHomepage from './features/ClinicHomepage/ClinicHomepage';
+import PembayaranBerhasil from './features/Pembayaran/PembayaranBerhasil';
 import {BrowserRouter as Router, Routes,Route} from 'react-router-dom'
 
 import ScrollToTop from './ScrollToTop';
 import { useState } from 'react';
-
+import BookingHomepage from './features/Booking/BookingHomepage';
+import AntrianHomepage from './features/Antrian/AntrianHomepage';
+import BookingBerhasil from './features/Antrian/BookingBerhasil';
+import RekamMedisHomepage from './features/RekamMedis/RekamMedisHomepage';
+import RekamMedisFileViewer from './features/RekamMedis/RekamMedisFileViewer';
 
 function App() {
   
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const handleLogin = () => {
     setIsAuthenticated(true);
@@ -33,7 +38,7 @@ function App() {
         <ScrollToTop/>
         <Routes>
 
-          <Route path='/' element={<PreLoginPage/>} />
+          <Route path='/' element={<PreLoginPage userLoggedOff={handleLogout}/>} />
           <Route path='register-email' element={<EmailRegister/>}/>
           <Route path='register-phone' element={<PhoneRegister/>}/>
           <Route path='login' element={<LoginForm handleLogin={handleLogin}/>} />
@@ -43,6 +48,12 @@ function App() {
           <Route path='consultation/doctor-choosing/jadwal' element={<JadwalHomepage/>}/>
           <Route path='consultation/doctor-choosing/jadwal/pembayaran' element={<PembayaranHomepage/>}/>
           <Route path='clinicHomepage' element={<ClinicHomepage/>} />
+          <Route path='consultation/doctor-choosing/jadwal/pembayaran/pembayaranBerhasil' element={<PembayaranBerhasil/>}/>
+          <Route path='homepage/bookingPage' element={<BookingHomepage/>}/>
+          <Route path='homepage/bookingPage/antrian' element={<AntrianHomepage/>}/>
+          <Route path='homepage/bookingPage/antrian/bookingBerhasil' element={<BookingBerhasil/>}/>
+          <Route path='homepage/rekamMedis' element={<RekamMedisHomepage/>}/>
+          <Route path='homepage/rekamMedis/file' element={<RekamMedisFileViewer/>}/>
         </Routes>
       <div className='h-20 max-h-max  w-full'></div>
       <>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {Link} from 'react-router-dom';
 import mediqLogo from '../Assets/mediqLogo.svg'
 
@@ -7,8 +7,11 @@ Used before the User Login
 - If the user has login, this page won't show up
 */
 
-const PreLoginPage = () => {
+const PreLoginPage = ({userLoggedOff}) => {
 
+    useEffect(() => {
+        userLoggedOff()
+      }, []);
     return(
         <div className="w-full h-screen flex items-center gap-7 flex-col ">
             <div className="text-center mt-20 font-poppins font-semibold text-5xl">

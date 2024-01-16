@@ -10,7 +10,7 @@ const Navbar = () =>{
         navigate('/homepage')
     }
     return(
-        <nav className="fixed rounded-t-xl w-full h-14 justify-around border-t-[5px] border-x-[5px] flex shadow-2xl shadow-black bottom-0 bg-white ">
+        <nav className="fixed rounded-t-xl w-full h-14 justify-around border-t-[5px] border-x-[5px] flex shadow-2xl shadow-black bottom-0 bg-white z-20">
             <button className="flex-grow flex justify-center">
                <img src={Layanan} alt="" className="h-full"/>
             </button>

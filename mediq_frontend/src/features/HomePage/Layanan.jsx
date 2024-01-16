@@ -6,8 +6,8 @@ import Consult from "../Assets/Consult.svg"
 
 const Layanan = () => {
     const services = [{
-        image: RekapMedis, text: "Periksa Rekam Medis Pribadi", buttonText : "Open", navigate : "/homepage"
-    }, {image: Booking, text : "Booking Antrian Faskes", buttonText : "Book", navigate: "/homepage"}, {image: Consult, text: "Konsultasi Dokter Online", buttonText: "Book", navigate : "/consultation"}];
+        image: RekapMedis, text: "Periksa Rekam Medis Pribadi", buttonText : "Open", navigate : "rekamMedis"
+    }, {image: Booking, text : "Booking Antrian Faskes", buttonText : "Book", navigate: "/homepage/bookingPage"}, {image: Consult, text: "Konsultasi Dokter Online", buttonText: "Book", navigate : "/consultation"}];
 
     return(
         <div className="my-3 mx-10">
