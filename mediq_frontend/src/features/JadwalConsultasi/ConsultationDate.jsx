@@ -59,7 +59,7 @@ const ConsultationDate = () => {
     
     return(
         <div>
-            <div className="items-center gap-3 font-poppins text-[#104935]  text-lg flex">
+            <div className="items-center gap-3 font-poppins text-[#104935]  text-lg flex max-md:text-sm">
                 <h3>{timeDescription}, {formattedDateIndonesia}</h3>
                 <div className="">
                     <span className="datepicker-toggle h-6">
@@ -68,12 +68,13 @@ const ConsultationDate = () => {
                     </span>
                 </div>
             </div>
-            <div className="w-full justify-evenly bg-[#E2F9F9] rounded-lg h-fit py-5 grid grid-flow-col">
+            <br />
+            <div className="w-full justify-evenly bg-[#E2F9F9] rounded-lg h-fit p-5 max-md:p-2 grid-flow-col inline-grid ">
                 {datesOption.map((item, index) => (
                     <div key={index} className="flex flex-col items-center">
-                    <button className={`rounded-xl bg-opacity-15 h-24 w-24  text-[#319CA5] text-center text-xl max-md:size-14 max-md:text-[12px] ${index === selectedButton ? 'border-[#319CA5] border-2 border-solid bg-[#2ABDC9]':''}`} onClick={() => handleButtonClick(index)}>
+                    <button className={`rounded-xl bg-opacity-15 h-24 w-24  text-[#319CA5] text-center text-xl max-md:size-10 max-md:text-xs ${index === selectedButton ? 'border-[#319CA5] border-2 border-solid bg-[#2ABDC9]':''}`} onClick={() => handleButtonClick(index)}>
                     <p>{item.date.split('/')[1]}</p>
-                    <p className="max-md:text-[12px] text-xs  ">{item.day}</p>
+                    <p className="max-md:text-[10px] max-md:-translate-y-1 text-lg  ">{item.day}</p>
                  </button>
                     </div>
                 ))}

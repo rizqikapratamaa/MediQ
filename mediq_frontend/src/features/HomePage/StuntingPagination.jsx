@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Demo1 from '../Assets/demo1.jpg'
+import Demo1 from '../Assets/Stunting/Info1.png'
 import Demo2 from '../Assets/demo2.jpg'
 import Demo3 from '../Assets/demo3.jpg'
 import Demo4 from '../Assets/demo4.jpg'
@@ -7,30 +7,47 @@ import Arrow from '../Assets/BackArrow.svg'
 
 const Pagination = () =>{
   const [currentPage, setCurrentPage] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const handlePageChange = (page) =>{
+  const handlePageChange = (page, event) =>{
+    event.preventDefault();
     setCurrentPage(page);
+    if (isTransitioning) {
+      return;
+    }
+
+    event.preventDefault();
+
+    // Set the transition state to true
+    setIsTransitioning(true);
+
+    setTimeout(() => {
+      setCurrentPage(page);
+
+      setIsTransitioning(false);
+    }, 1000); 
   }
   
-  useEffect(() =>{
+  useEffect(() => {
     const changePage = () => {
-      const nextPage = currentPage % 3 + 1;
-      setCurrentPage(nextPage);
+      const nextPage = (currentPage + 1) % 4;
+      handlePageChange(nextPage, { preventDefault: () => {} });
     };
 
     const timeChange = setTimeout(changePage, 4000);
 
-    return() => clearTimeout(timeChange);
-    
-  }, [currentPage]);
+    return () => clearTimeout(timeChange);
+
+  }, [currentPage, isTransitioning]);
+  
   return(
-    <div className='w-max h-max overflow-hidden max-w-screen-lg '>
+    <div className='w-max h-max overflow-hidden max-w-screen-lg relative'>
         {/* Image Showing */}
         <div className='w-full sticky top-1/2'>
-          <button className='absolute left-3 transform ' onClick={() => {handlePageChange(currentPage % 3 + 1)}}>
+          <button className='absolute left-3 transform ' onClick={(e) => {handlePageChange((currentPage - 1 + 4) % 4,e)}} disabled={isTransitioning}>
             <img src={Arrow} alt="" className=''/>
           </button>
-          <button className='absolute right-5 transform' onClick={() => {handlePageChange(currentPage % 3 + 1)}}>
+          <button className='absolute right-5 transform' onClick={(e) => {handlePageChange((currentPage + 1) % 4,e)}} disabled={isTransitioning}>
             <img src={Arrow} alt="" className='rotate-180'/>
           </button>
         </div>
@@ -42,7 +59,7 @@ const Pagination = () =>{
         </div>
 
         {/* Navigation */}
-        <div className="absolute left-1/2 -translate-y-11 ">
+        <div className="absolute left-1/2 bottom-2 -translate-x-1/2">
         {[0, 1, 2, 3].map((index) => (
           <a
             key={index}

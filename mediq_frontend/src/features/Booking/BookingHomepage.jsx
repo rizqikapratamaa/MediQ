@@ -12,6 +12,10 @@ const BookingHomepage = () => {
     const handleSetData = (value) => {
         setData(value)
     }
+
+    const clinicDummy = [
+        {name : 'Puskesmas', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDoktor : 4, Distance : 5},{name : 'Puskesmas', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDoktor : 4, Distance : 5},{name : 'Puskesmas', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDoktor : 4, Distance : 5}
+    ]
     const ButtonComponent = {
         buttonText : 'Book Antrian',
         buttonImage : Medical,
@@ -20,13 +24,12 @@ const BookingHomepage = () => {
     return(
         <div className="font-poppins">
             <TopBarInside/>
-            <div className="mx-10 my-20 flex flex-col gap-5">
+            <div className="mx-10 my-20  max-md:my-5 flex flex-col gap-5">
                 <BookingTitle title={'Cari Klinik'}/>
                 <SearchBar text={'Cari Klinik'} onSearch={handleSetData} />
                 <BookingTitle /> 
                 <Maps/>
-                <PilihanClinic ButtonComponent={ButtonComponent} navigateId={1}/>
-                
+                <PilihanClinic ButtonComponent={ButtonComponent} navigateId={1} ClinicData={clinicDummy}/>                
             </div>
         </div>
     );

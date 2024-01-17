@@ -75,7 +75,7 @@ const PhoneRegister = () =>{
         event.preventDefault();
         if(checkPhoneNumber() && checkBorn() && checkNik() && passwordChecker()){
             try{
-                const response = await axios.post('http://localhost:8000/signup-phone',{
+                const response = await axios.post('api/signup-phone',{
                     email : '',
                     phoneNumber,
                     gender,

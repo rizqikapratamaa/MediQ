@@ -211,10 +211,10 @@ router.get('/konsultasi-kesehatan', (req, res) => {
 });
 
 router.get('/konsultasi-kesehatan/dokter-umum', (req, res) => {
-    if (!req.session.user){
-        res.redirect('/');
-        return;
-    }
+    // if (!req.session.user){
+    //     res.status(401).json({ error: 'Unauthorized' });
+    //     return;
+    // }
     let doctors = [];
     const db = firebase.firestore();
     db.collection('doctors').where('bidang', '==', 'umum').get()
@@ -222,7 +222,10 @@ router.get('/konsultasi-kesehatan/dokter-umum', (req, res) => {
             querySnapshot.forEach((doc) => {
                 doctors.push(doc.data());
             });
-            res.render('dokter-umum', { doctors: doctors });
+            // res.render('dokter-umum', { doctors: doctors });
+            res.status(200).json({
+                doctors : doctors
+            });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
@@ -243,6 +246,24 @@ router.get('/konsultasi-kesehatan/dokter-gigi-mulut', (req, res) => {
                 doctors.push(doc.data());
             });
             res.render('dokter-gigi-mulut', { doctors: doctors });
+        })
+        .catch((error) => {
+            console.error("Error getting data: ", error);
+        });
+});
+router.get('/konsultasi-kesehatan/dokter-gizi', (req, res) => {
+    if (!req.session.user){
+        res.redirect('/');
+        return;
+    }
+    let doctors = [];
+    const db = firebase.firestore();
+    db.collection('doctors').where('bidang', '==', 'gizi').get()
+        .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                doctors.push(doc.data());
+            });
+            res.render('dokter-gizi', { doctors: doctors });
         })
         .catch((error) => {
             console.error("Error getting data: ", error);
