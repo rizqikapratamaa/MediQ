@@ -18,6 +18,9 @@
                 <p>Pengalaman: <%= doctor.experience %> tahun</p>
                 <p>Harga: <%= doctor.price %></p>
                 <p>Rating: <%= doctor.rating %></p>
+                <% if (doctor.clinicName) { %>
+                    <p>Tempat Praktek: <%= doctor.clinicName %></p>
+                <% } %>
                 <p><a href="/konsultasi-kesehatan/dokter-umum/<%= encodeURIComponent(doctor.id) %>"> Lihat jadwal</a></p>
             </div>
         <% }); %>
