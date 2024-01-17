@@ -18,7 +18,7 @@ const JadwalHomepage = () =>{
                 <ChooseTitle title={'Pilih tanggal'}/>
                 <ConsultationDate/>
                 <ChooseTitle title={'Pilih jam'}/>
-                <Jam />
+                <Jam doctorData={doctorData}/>
             </div>
 
         </div>

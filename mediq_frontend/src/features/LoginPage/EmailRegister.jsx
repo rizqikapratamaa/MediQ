@@ -89,7 +89,7 @@ const EmailRegister = () =>{
         event.preventDefault();
         if(checkEmail() && checkBorn() && checkNik() && passwordChecker()){
             try {
-                const response = await axios.post("http://localhost:8000/signup-email", {
+                const response = await axios.post("/api/signup-email", {
                     email,
                     phoneNumber: '',
                     gender,

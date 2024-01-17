@@ -11,9 +11,9 @@ const Maps = () => {
 
     const newMap = new mapboxgl.Map({
       container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: 'mapbox://styles/mapbox/streets-v12',
       center: [0, 0],
-      zoom: 1,
+      zoom: -1,
     });
 
     setMap(newMap);
@@ -50,14 +50,14 @@ const Maps = () => {
     }
   }
   return (
-    <div className="h-96 border-black border-2 rounded-xl relative">
+    <div className="h-96 max-md:h-44 border-black border-2 rounded-xl relative">
       <div className="overflow-hidden h-full w-full rounded-xl">
           <div id="map" className="h-full"></div>
       </div>
-      <div className="absolute bottom-0 w-64 h-20 z-10 left-28 translate-y-12 border-[6px] bg-white border-white rounded-3xl">
+      <div className="absolute bottom-0 w-64 h-20 z-10 left-28 translate-y-12 border-[6px] bg-white border-white rounded-3xl max-md:w-36 max-md:h-12 max-md:text-xs text-lg max-md:translate-y-8">
           <button
           onClick={trackUserLocation}
-          className="h-full w-full right-4 bg-white text-[#56BDC5] rounded-3xl shadow-md  font-poppins text-lg border-[#56BDC5] border-2 border-solid shaodw-lg drop-shadow-xl"
+          className="h-full w-full right-4 bg-white text-[#56BDC5] rounded-3xl shadow-md  font-poppins  border-[#56BDC5] border-2 border-solid shaodw-lg drop-shadow-xl "
         >
           Cari Klinik Terdekat
         </button>

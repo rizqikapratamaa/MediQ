@@ -4,7 +4,7 @@ import Titles from "../JadwalConsultasi/Title";
 import MyPdfViewer from "./PdfViewer";
 const RekamMedisFileViewer = () => {
     return(
-        <div>
+        <div className="">
             <TopBarInside/>
             <div className="m-10">
                 <Titles text={'Rekam Medis'}/>

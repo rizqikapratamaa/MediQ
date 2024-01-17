@@ -10,14 +10,14 @@ const Navbar = () =>{
         navigate('/homepage')
     }
     return(
-        <nav className="fixed rounded-t-xl w-full h-14 justify-around border-t-[5px] border-x-[5px] flex shadow-2xl shadow-black bottom-0 bg-white z-20">
-            <button className="flex-grow flex justify-center">
+        <nav className="fixed rounded-t-xl w-full h-14 justify-around border-t-[5px] border-x-[5px] flex shadow-2xl shadow-black bottom-0 bg-white z-20 items-center">
+            <button className="flex-grow flex justify-center max-md:h-9">
                <img src={Layanan} alt="" className="h-full"/>
             </button>
-            <button className="flex-grow flex justify-center" onClick={handleHomeButton}>
+            <button className="flex-grow flex justify-center max-md:h-9" onClick={handleHomeButton}>
                <img src={Home} alt="" className="h-full"/>
             </button>
-            <button className="flex-grow flex justify-center">
+            <button className="flex-grow flex justify-center max-md:h-9">
                <img src={Profile} alt="" className="h-full "/>
             </button>
 

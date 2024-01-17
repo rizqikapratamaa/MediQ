@@ -21,8 +21,9 @@ const LoginForm = ({handleLogin}) =>{
         const identifier = document.getElementsByName('identifier')[0].value;
 
         if(validEmail(email) || validPhone()){
+            console.log(Proxy.name);
             try{
-                const response = await axios.post("http://localhost:8000/login" ,{
+                const response = await axios.post("/api/login" ,{
                     identifier: identifier, password
                 });
 

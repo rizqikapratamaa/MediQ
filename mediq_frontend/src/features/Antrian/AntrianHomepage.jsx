@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
 import TopBarInside from "../HomePage/TopBarInside";
 import BookingTitle from "../Booking/bookingTitle";
 import { useLocation } from "react-router-dom";
@@ -39,6 +39,10 @@ const AntrianHomepage = () => {
         }
     }
 
+    useEffect(() => {
+        handleDataPassing();
+    },[])
+
   
     return(
         <div className="font-poppins">
@@ -47,7 +51,7 @@ const AntrianHomepage = () => {
                 <BookingTitle title={'Booking Antrian'}/>
                 
                 <p className="text-sm my-2">Booking antrian hanya dapat dilakukan untuk hari ini</p>
-                <AntrianLabel/>
+                <AntrianLabel data={dataAntrian}/>
                 <PilihanLayanan id={1} detailLayanan={dummyLayanan}/>
                 <ButtonPembayaran id={2} text={'Book Antrian'}/>
             </div>

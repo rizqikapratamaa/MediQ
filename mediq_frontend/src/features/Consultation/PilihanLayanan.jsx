@@ -18,8 +18,9 @@ const PilihanLayanan = ({detailLayanan, searchedValue, id}) => {
     }
     let filteredLayanan = detailLayanan;
 
-     const handleNavigate = (layanan) => {
-        navigate('./doctor-choosing', { state: { data: layanan } });
+     const handleNavigate = (layanan, api) => {
+        
+        navigate('./doctor-choosing', { state: { data: {layanan, api} }});
     }
 
      const handleChangeLayanan = (index) => {
@@ -38,20 +39,19 @@ const PilihanLayanan = ({detailLayanan, searchedValue, id}) => {
                 filteredLayanan.map((layanan, index) => (
                 <button
                     key={index}
-                    className="w-full h-16 border-2 border-[#56BDC5] rounded-2xl bg-white my-5 flex items-center"
-                    onClick={() => handleNavigate(layanan.text)}>
-                    <img src={layanan.photo} alt="" className="h-12 m-2" />
-                    <h1 className="text-lg">{layanan.text}</h1>
+                    className="w-full h-16 border-2 border-[#56BDC5] rounded-2xl bg-white my-5 flex items-center text-left p-4"
+                    onClick={() => handleNavigate(layanan.text, layanan.api)}>
+                    <h1 className="text-lg max-md:text-sm">{layanan.text}</h1>
                 </button>
                 ))}
             {id === 1 && 
                 detailLayanan.map((layanan, index) => (    
                     <button
                         key={index}
-                        className={`w-full h-16 border-2 border-[#56BDC5] rounded-2xl  my-5 flex items-center ${currentIndex === index ? 'bg-[#2ABDC9] bg-opacity-15' : 'bg-white opacity-100'}`}
+                        className={`w-full h-16 border-2 border-[#56BDC5] rounded-2xl  my-5 flex items-center p-4 ${currentIndex === index ? 'bg-[#2ABDC9] bg-opacity-15' : 'bg-white opacity-100'}`}
                         onClick={() => handleChangeLayanan(index)}>
-                        <img src={layanan.photo} alt="" className="h-12 m-2" />
-                        <h1 className="text-lg">{layanan.text}</h1>
+                        {/* <img src={layanan.photo} alt="" className="h-12 m-2" /> */}
+                        <h1 className="text-lg max-md:text-sm text-left">{layanan.text}</h1>
                     </button>
                 ))
             }

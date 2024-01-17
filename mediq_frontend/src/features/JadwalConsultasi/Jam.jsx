@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Jam = () => {
+const Jam = ({doctorData}) => {
     const navigate = useNavigate();
     const[selectedHours, setSelectedHours] = useState(0);
     
     const handleJanji = () => {
-        navigate('pembayaran');
+        navigate('pembayaran', {state: {data : doctorData}});
     } 
     const dummyData = [
         { id: 1, time: '09:00' },
@@ -32,7 +32,7 @@ const Jam = () => {
             <div className=" max-md:grid-rows-3 max-lg:grid-cols-3 gap-8 grid-rows-3 grid-cols-5 grid-flow-row inline-grid max-md:text-sm text-lg">
                 { dummyData.map((item, index) => (
                     
-                <button className={`shadow-md drop-shadow-md shadow-[#6B779A] h-24 w-40 max-md:h-16 max-md:w-36 border-[#56BDC5] border-solid text-center justify-center rounded-2xl border-2 ${index === selectedHours ? 'bg-[#2ABDC9] bg-opacity-20':'background-white'}`} key={index} onClick={()=> handleSelectedHours(index)}>
+                <button className={`shadow-md drop-shadow-md shadow-[#6B779A] h-24 w-40 max-md:h-10  max-md:w-24 border-[#56BDC5] border-solid text-center justify-center rounded-2xl border-2 max-md:text-sm ${index === selectedHours ? 'bg-[#2ABDC9] bg-opacity-20 text-[#0E464A]':'background-white text-[#6B779A]'}`} key={index} onClick={()=> handleSelectedHours(index)}>
                     {item.time}
                 </button>
                 ))

@@ -7,17 +7,17 @@ import PilihanLayanan from "./PilihanLayanan";
 import Photo from '../Assets/DummyPhoto.png'
 const Consultation = () => {
     const dummyLayanan = [{
-        text: 'Layanan Umum', photo : Photo,
+        text: 'Layanan Umum', photo : Photo, api : '/api/konsultasi-kesehatan/dokter-umum'
     },{
-        text: 'Layanan Gigi dan Mulut', photo : Photo,
+        text: 'Layanan Gigi dan Mulut', photo : Photo, api: '/api/konsultasi-kesehatan/dokter-gigi-mulut'
     },{
-        text: 'Layanan Gizi', photo : Photo,
+        text: 'Layanan Gizi', photo : Photo, api: '/api/konsultasi-kesehatan/dokter-gizi'
     },{
-        text: 'Layanan Anak dan Remaja', photo : Photo,
+        text: 'Layanan Anak dan Remaja', photo : Photo, api: '/api/konsultasi-kesehatan/dokter-anak-remaja'
     },{
-        text: 'Layanan Kesehatan Ibu dan KB', photo : Photo,
+        text: 'Layanan Kesehatan Ibu dan KB', photo : Photo, api : '/api/konsultasi-kesehatan/dokter-ibu-kb'
     },{
-        text: 'Layanan Lansia', photo : Photo,
+        text: 'Layanan Lansia', photo : Photo, api : '/api/konsultasi-kesehatan/dokter-lansia'
     }]
     
     const [data, setData] = useState('');

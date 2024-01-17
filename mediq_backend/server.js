@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.set('view engine', 'ejs');
 
-app.use('/', router);
+app.use('/api', router);
 router.get('/', (req, res) => {
     if (req.session.user) {
         res.redirect('/dashboard');
