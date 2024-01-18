@@ -102,7 +102,7 @@ By leveraging information technology in healthcare services, MediQ aims to:
 8. **Management Online Consultation**
 
 <div align="center">
-  <img src="9.png" alt="Management Online Consultation" />
+  <img src="Add a subheading (5).png" alt="Management Online Consultation" />
 </div> 
 
 ## MEET OUR TEAM
