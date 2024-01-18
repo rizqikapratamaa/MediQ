@@ -1223,12 +1223,12 @@ router.get('/manajemen-konsultasi', checkClinicAuth, async (req, res) => {
     }
 });
 
-router.get('/tambah-dokter', checkClinicAuth, (req, res) => {
+router.get('manajemen-konsultasi/tambah-dokter', checkClinicAuth, (req, res) => {
     res.render('tambah-dokter', { user: req.session.user });
 });
 
-router.post('/tambah-dokter', checkClinicAuth, async (req, res) => {
-    const { bidang, experience, id, name, price, rating } = req.body;
+router.post('manajemen-konsultasi/tambah-dokter', checkClinicAuth, async (req, res) => {
+    const { bidang, experience, id, name, price, rating, location } = req.body;
     const clinicUserId = req.session.user.uid;
 
     const db = firebase.firestore();
@@ -1253,7 +1253,8 @@ router.post('/tambah-dokter', checkClinicAuth, async (req, res) => {
             price,
             rating,
             clinicId: clinicUserId,
-            schedule: []
+            schedule: [],
+            location
         });
 
         res.redirect('/manajemen-konsultasi');
