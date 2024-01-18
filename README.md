@@ -78,7 +78,7 @@ By leveraging information technology in healthcare services, MediQ aims to:
 4. **Online Queue Booking**
 
 <div align="center">
-  <img src="5.png" alt="Online Queue Booking" />
+  <img src="maps.png" alt="Online Queue Booking" />
 </div>
    
 5. **Integrated Medical Record**
