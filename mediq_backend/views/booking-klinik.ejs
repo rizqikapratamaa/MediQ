@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Klinik</title>
+</head>
+<body>
+    <h1>Booking Klinik</h1>
+    <% if (clinicUsers && clinicUsers.length > 0) { %>
+        <ul>
+            <% clinicUsers.forEach(function(clinicUser) { %>
+                <li>
+                    Nama Klinik: <%= clinicUser.fullName %><br>
+                    Alamat: <%= clinicUser.address %><br>
+                    Telepon: <%= clinicUser.phoneNumber %><br>
+                    <form action="booking-klinik/<%= clinicUser.clinicId %>/pilih-layanan" method="get">
+                        <button type="submit">Pilih</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>Tidak ada klinik yang terdaftar.</p>
+    <% } %>
+
+    <p>
+        <a href="/">Kembali ke Beranda</a>
+    </p>
+</body>
+</html>

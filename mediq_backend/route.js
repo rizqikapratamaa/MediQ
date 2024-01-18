@@ -36,7 +36,6 @@ router.post('/signup-email', (req, res) => {
     db.collection('users').where('email', '==', email).get()
     .then((snapshot) => {
         if (!snapshot.empty) {
-            // res.status(400).json({ status: 'error', message: 'Email sudah terdaftar', field: 'email' });
             res.status(400).send('Email sudah terdaftar');
         } else {
             db.collection('users').where('nik', '==', nik).get()
@@ -44,6 +43,7 @@ router.post('/signup-email', (req, res) => {
                 if (!snapshot.empty) {
                     res.status(400).send('Nik sudah terdaftar');
                 } else {
+                    // Tambahkan pengguna baru
                     db.collection('users').add({
                         email,
                         phoneNumber: '',
@@ -54,11 +54,21 @@ router.post('/signup-email', (req, res) => {
                         password,
                         role
                     }).then((docRef) => {
-                        db.collection('users').doc(docRef.id).collection('booking').add({}).then(() => {
-                            res.status(200).json({ status: 'success', message: 'Akun berhasil didaftarkan, silahkan login untuk melanjutkan', field: 'nik' });
-                        }).catch((error) => {
-                            console.error("Error adding booking collection: ", error);
-                        });
+                        // Tambahkan subkoleksi "booking"
+                        db.collection('users').doc(docRef.id).collection('booking').add({})
+                            .then(() => {
+                                // Tambahkan subkoleksi "antrian"
+                                db.collection('users').doc(docRef.id).collection('antrian').add({})
+                                    .then(() => {
+                                        res.status(200).json({ status: 'success', message: 'Akun berhasil didaftarkan, silahkan login untuk melanjutkan', field: 'nik' });
+                                    })
+                                    .catch((error) => {
+                                        console.error("Error adding antrian collection: ", error);
+                                    });
+                            })
+                            .catch((error) => {
+                                console.error("Error adding booking collection: ", error);
+                            });
                     }).catch((error) => {
                         console.error("Error adding data: ", error);
                     });
@@ -71,6 +81,7 @@ router.post('/signup-email', (req, res) => {
         console.error("Error checking email: ", error);
     });
 });
+
 
 
 
@@ -94,6 +105,7 @@ router.post('/signup-phone', (req, res) => {
                 if (!snapshot.empty) {
                     res.status(400).send('NIK sudah terdaftar');
                 } else {
+                    // Tambahkan pengguna baru
                     db.collection('users').add({
                         email: '',
                         phoneNumber,
@@ -104,11 +116,21 @@ router.post('/signup-phone', (req, res) => {
                         password,
                         role
                     }).then((docRef) => {
-                        db.collection('users').doc(docRef.id).collection('booking').add({}).then(() => {
-                            res.status(200).send('Akun anda sudah berhasil dibuat');
-                        }).catch((error) => {
-                            console.error("Error adding booking collection: ", error);
-                        });
+                        // Tambahkan subkoleksi "booking"
+                        db.collection('users').doc(docRef.id).collection('booking').add({})
+                            .then(() => {
+                                // Tambahkan subkoleksi "antrian"
+                                db.collection('users').doc(docRef.id).collection('antrian').add({})
+                                    .then(() => {
+                                        res.status(200).send('Akun anda sudah berhasil dibuat');
+                                    })
+                                    .catch((error) => {
+                                        console.error("Error adding antrian collection: ", error);
+                                    });
+                            })
+                            .catch((error) => {
+                                console.error("Error adding booking collection: ", error);
+                            });
                     }).catch((error) => {
                         console.error("Error adding data: ", error);
                     });
@@ -796,6 +818,334 @@ router.post('/konsultasi-kesehatan/dokter-lansia/:doctorId/booking', async (req,
     }
 });
 
+router.get('/booking-klinik', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const db = firebase.firestore();
+
+    try {
+        const clinicUsersSnapshot = await db.collection('users').where('role', '==', 'clinic').get();
+
+        const clinicUsers = clinicUsersSnapshot.docs.map(doc => doc.data());
+
+        res.render('booking-klinik', { clinicUsers: clinicUsers, user: req.session.user });
+    } catch (error) {
+        console.error("Error getting clinic users: ", error);
+        res.status(500).send("Error getting clinic users");
+    }
+});
+
+router.get('/booking-klinik/:clinicId/pilih-layanan', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : "Nama Klinik Anda";
+        res.render('pilih-layanan', { clinicName: clinicName, clinicId: clinicId });
+    } catch (error) {
+        console.error("Error getting clinic information: ", error);
+        res.status(500).send("Error getting clinic information");
+    }
+});
+
+const incrementAntrian = async (db, clinicId) => {
+    try {
+        const antrianSnapshot = await db.collection('users').doc(clinicId).collection('antrian').get();
+        let maxAntrian = 0;
+        antrianSnapshot.forEach((doc) => {
+            if (doc.data().queueNumber > maxAntrian) {
+                maxAntrian = doc.data().queueNumber;
+            }
+        });
+
+        const newAntrian = maxAntrian + 1;
+
+        return newAntrian;
+    } catch (error) {
+        console.error("Error incrementing queue: ", error);
+        throw error;
+    }
+};
+
+router.get('/booking-klinik/:clinicId/pilih-layanan/umum', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    const fullName = req.session.user.fullName;
+    const userNIK = req.session.user.nik;
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : null;
+
+        const antrian = await incrementAntrian(db, clinicId);
+
+        await db.collection('users').doc(clinicId).collection('antrian').add({
+            fullName: fullName,
+            userNIK: userNIK,
+            clinicId: clinicId,
+            clinicName: clinicName,
+            bidang: 'umum',
+            queueNumber: antrian,
+        });
+
+        const patientSnapshot = await db.collection('users').where('role', '==', 'patient').where('nik', '==', userNIK).get();
+
+        patientSnapshot.forEach(async (doc) => {
+            await doc.ref.collection('antrian').add({
+                fullName: fullName,
+                userNIK: userNIK,
+                clinicId: clinicId,
+                clinicName: clinicName,
+                bidang: 'umum',
+                queueNumber: antrian,
+            });
+        });
+
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error during booking process: ", error);
+        res.status(500).send("Error during booking process");
+    }
+});
+
+router.get('/booking-klinik/:clinicId/pilih-layanan/gigi-mulut', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    const fullName = req.session.user.fullName;
+    const userNIK = req.session.user.nik;
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : null;
+
+        const antrian = await incrementAntrian(db, clinicId);
+
+        await db.collection('users').doc(clinicId).collection('antrian').add({
+            fullName: fullName,
+            userNIK: userNIK,
+            clinicId: clinicId,
+            clinicName: clinicName,
+            bidang: 'gigi dan mulut',
+            queueNumber: antrian,
+        });
+
+        const patientSnapshot = await db.collection('users').where('role', '==', 'patient').where('nik', '==', userNIK).get();
+
+        patientSnapshot.forEach(async (doc) => {
+            await doc.ref.collection('antrian').add({
+                fullName: fullName,
+                userNIK: userNIK,
+                clinicId: clinicId,
+                clinicName: clinicName,
+                bidang: 'gigi dan mulut',
+                queueNumber: antrian,
+            });
+        });
+
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error during booking process: ", error);
+        res.status(500).send("Error during booking process");
+    }
+});
+
+router.get('/booking-klinik/:clinicId/pilih-layanan/gizi', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    const fullName = req.session.user.fullName;
+    const userNIK = req.session.user.nik;
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : null;
+
+        const antrian = await incrementAntrian(db, clinicId);
+
+        await db.collection('users').doc(clinicId).collection('antrian').add({
+            fullName: fullName,
+            userNIK: userNIK,
+            clinicId: clinicId,
+            clinicName: clinicName,
+            bidang: 'gizi',
+            queueNumber: antrian,
+        });
+
+        const patientSnapshot = await db.collection('users').where('role', '==', 'patient').where('nik', '==', userNIK).get();
+
+        patientSnapshot.forEach(async (doc) => {
+            await doc.ref.collection('antrian').add({
+                fullName: fullName,
+                userNIK: userNIK,
+                clinicId: clinicId,
+                clinicName: clinicName,
+                bidang: 'gizi',
+                queueNumber: antrian,
+            });
+        });
+
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error during booking process: ", error);
+        res.status(500).send("Error during booking process");
+    }
+});
+
+router.get('/booking-klinik/:clinicId/pilih-layanan/anak-remaja', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    const fullName = req.session.user.fullName;
+    const userNIK = req.session.user.nik;
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : null;
+
+        const antrian = await incrementAntrian(db, clinicId);
+
+        await db.collection('users').doc(clinicId).collection('antrian').add({
+            fullName: fullName,
+            userNIK: userNIK,
+            clinicId: clinicId,
+            clinicName: clinicName,
+            bidang: 'anak dan remaja',
+            queueNumber: antrian,
+        });
+
+        const patientSnapshot = await db.collection('users').where('role', '==', 'patient').where('nik', '==', userNIK).get();
+
+        patientSnapshot.forEach(async (doc) => {
+            await doc.ref.collection('antrian').add({
+                fullName: fullName,
+                userNIK: userNIK,
+                clinicId: clinicId,
+                clinicName: clinicName,
+                bidang: 'anak dan remaja',
+                queueNumber: antrian,
+            });
+        });
+
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error during booking process: ", error);
+        res.status(500).send("Error during booking process");
+    }
+});
+
+router.get('/booking-klinik/:clinicId/pilih-layanan/ibu-kb', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    const fullName = req.session.user.fullName;
+    const userNIK = req.session.user.nik;
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : null;
+
+        const antrian = await incrementAntrian(db, clinicId);
+
+        await db.collection('users').doc(clinicId).collection('antrian').add({
+            fullName: fullName,
+            userNIK: userNIK,
+            clinicId: clinicId,
+            clinicName: clinicName,
+            bidang: 'ibu dan kb',
+            queueNumber: antrian,
+        });
+
+        const patientSnapshot = await db.collection('users').where('role', '==', 'patient').where('nik', '==', userNIK).get();
+
+        patientSnapshot.forEach(async (doc) => {
+            await doc.ref.collection('antrian').add({
+                fullName: fullName,
+                userNIK: userNIK,
+                clinicId: clinicId,
+                clinicName: clinicName,
+                bidang: 'ibu dan kb',
+                queueNumber: antrian,
+            });
+        });
+
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error during booking process: ", error);
+        res.status(500).send("Error during booking process");
+    }
+});
+
+router.get('/booking-klinik/:clinicId/pilih-layanan/lansia', async (req, res) => {
+    if (!req.session.user) {
+        res.redirect('/');
+        return;
+    }
+    const fullName = req.session.user.fullName;
+    const userNIK = req.session.user.nik;
+    const clinicId = req.params.clinicId;
+    const db = firebase.firestore();
+
+    try {
+        const clinicSnapshot = await db.collection('users').doc(clinicId).get();
+        const clinicName = clinicSnapshot.exists ? clinicSnapshot.data().fullName : null;
+
+        const antrian = await incrementAntrian(db, clinicId);
+
+        await db.collection('users').doc(clinicId).collection('antrian').add({
+            fullName: fullName,
+            userNIK: userNIK,
+            clinicId: clinicId,
+            clinicName: clinicName,
+            bidang: 'lansia',
+            queueNumber: antrian,
+        });
+
+        const patientSnapshot = await db.collection('users').where('role', '==', 'patient').where('nik', '==', userNIK).get();
+
+        patientSnapshot.forEach(async (doc) => {
+            await doc.ref.collection('antrian').add({
+                fullName: fullName,
+                userNIK: userNIK,
+                clinicId: clinicId,
+                clinicName: clinicName,
+                bidang: 'lansia',
+                queueNumber: antrian,
+            });
+        });
+
+        res.redirect('/');
+    } catch (error) {
+        console.error("Error during booking process: ", error);
+        res.status(500).send("Error during booking process");
+    }
+});
+
 // router.post('/process-payment', async (req, res) => {
 //     const paymentMethod = req.body.paymentMethod;
 //     const doctorId = req.params.doctorId;
@@ -873,12 +1223,12 @@ router.get('/manajemen-konsultasi', checkClinicAuth, async (req, res) => {
     }
 });
 
-router.get('/tambah-dokter', checkClinicAuth, (req, res) => {
+router.get('manajemen-konsultasi/tambah-dokter', checkClinicAuth, (req, res) => {
     res.render('tambah-dokter', { user: req.session.user });
 });
 
-router.post('/tambah-dokter', checkClinicAuth, async (req, res) => {
-    const { bidang, experience, id, name, price, rating } = req.body;
+router.post('manajemen-konsultasi/tambah-dokter', checkClinicAuth, async (req, res) => {
+    const { bidang, experience, id, name, price, rating, location } = req.body;
     const clinicUserId = req.session.user.uid;
 
     const db = firebase.firestore();
@@ -903,7 +1253,8 @@ router.post('/tambah-dokter', checkClinicAuth, async (req, res) => {
             price,
             rating,
             clinicId: clinicUserId,
-            schedule: []
+            schedule: [],
+            location
         });
 
         res.redirect('/manajemen-konsultasi');
