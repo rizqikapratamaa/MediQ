@@ -105,4 +105,10 @@ By leveraging information technology in healthcare services, MediQ aims to:
   <img src="9.png" alt="Management Online Consultation" />
 </div> 
 
+## MEET OUR TEAM
+1. Shabrina Maharani as Hustler
+2. Auralea Alvinia Syaikha as Hipster
+3. Muhammad Davis Adhipramana as Hacker
+4. Rizqika Mulia Pratama as Hacker
+
    
