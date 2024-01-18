@@ -51,3 +51,58 @@ By leveraging information technology in healthcare services, MediQ aims to:
 
 3. **Start Frontend**:
    - Run `npm run start` to start the frontend application.
+
+## Product Screenshot
+
+1. **Welcome Page and Signup Page**
+<div align="center">
+  <img src="1.png" alt="Welcome Page and Signup Page" />
+</div> 
+
+2. **Patient Account Homepage**
+
+<div align="center">
+  <img src="2.png" alt="Homepage" />
+</div>
+
+3. **Online Video Consultation**
+   
+<div align="center">
+  <img src="3.png" alt="Online Video Consultation" />
+</div>
+
+<div align="center">
+  <img src="4.png" alt="Payment" />
+</div>
+
+4. **Online Queue Booking**
+
+<div align="center">
+  <img src="5.png" alt="Online Queue Booking" />
+</div>
+   
+5. **Integrated Medical Record**
+
+<div align="center">
+  <img src="6.png" alt="Integrated Medical Record" />
+</div> 
+
+6. **Clinic Account Homepage**
+
+<div align="center">
+  <img src="7.png" alt="Clinic Account Homepage" />
+</div> 
+
+7. **Check Patient Queues**
+
+<div align="center">
+  <img src="8.png" alt="Check Patient Queues" />
+</div> 
+   
+8. **Management Online Consultation**
+
+<div align="center">
+  <img src="9.png" alt="Management Online Consultation" />
+</div> 
+
+   
