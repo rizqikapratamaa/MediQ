@@ -1,13 +1,26 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect , useState} from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import TopBarInside from "../HomePage/TopBarInside";
 import Centang from '../Assets/Centang.svg'
+
 const BookingBerhasil = () =>{
     const navigate = useNavigate();
+    const location = useLocation();
 
+    const [data, setData] = useState('');
+
+    useEffect(() => {
+        let selectedData = location?.state?.data;
+        if(selectedData){
+            setData(selectedData)
+            console.log(selectedData);
+        }
+    } ,[])
+    
     const handleNavigate = () => {
-        navigate('/homepage');   
+        navigate('/homepage', {state : {data : data}});   
     }
+    console.log(data);
 
 
     return(
@@ -17,7 +30,7 @@ const BookingBerhasil = () =>{
                 <div className="justify-center items-center flex flex-col m-10 w-80 h-auto gap-5 shadow-xl drop-shadow-xl rounded-2xl p-7">
                     <h1 className="font-semibold text-2xl">Berhasil !</h1>
                     <div className="w-full items-center flex justify-center h-12">
-                        <h1 className="text-lg w-full  rounded-lg border-2 border-[#56BDC5]">Antrian Anda: 34</h1>
+                        <h1 className="text-lg w-full  rounded-lg border-2 border-[#56BDC5]">Antrian Anda: {data.queueNumber}</h1>
                     </div>
                     <img src={Centang} alt="" />
                     <p>Antrian Anda di puskesmas Cibiru berhasil dipesan. Silahkan cek halaman utama bagian “Aktivitas Mendatang” atau klik tombol dibawah ini untuk <b>melihat nomor antrian yang sedang berjalan.</b></p>

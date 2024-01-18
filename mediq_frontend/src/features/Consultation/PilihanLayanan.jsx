@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { useNavigate} from "react-router-dom";
 
 
-const PilihanLayanan = ({detailLayanan, searchedValue, id}) => {
+const PilihanLayanan = ({detailLayanan, searchedValue, id, selectedIndex}) => {
 
     const navigate = useNavigate();
 
@@ -24,8 +24,8 @@ const PilihanLayanan = ({detailLayanan, searchedValue, id}) => {
     }
 
      const handleChangeLayanan = (index) => {
-        console.log(index)
         setCurrentIndex(index)
+        selectedIndex(index);
      }
 
     if(searchedValue != null){

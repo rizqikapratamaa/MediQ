@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Worker, Viewer} from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { toolbarPlugin, ToolbarSlot } from '@react-pdf-viewer/toolbar';
-import DummyPdf from '../Assets/recam-medik.pdf';
+import DummyPdf from '../Assets/chika.pdf';
 import Cetak from '../Assets/print.svg'
 import pdfjs from 'pdfjs-dist';
 

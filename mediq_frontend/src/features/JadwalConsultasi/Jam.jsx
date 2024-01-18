@@ -10,15 +10,15 @@ const Jam = ({doctorData, dateData}) => {
         navigate('pembayaran', {state: {data : selectedData}});
     } 
     const dummyData = [
-        { id: 1, time: '09:00' },
-        { id: 2, time: '10:00' },
-        { id: 3, time: '11:00' },
-        { id: 4, time: '12:00' },
-        { id: 5, time: '13:00' },
-        { id: 6, time: '14:00' },
-        { id: 7, time: '15:00' },
-        { id: 8, time: '16:00' },
-        { id: 9, time: '17:00' },
+        { id: 1, times: '09:00' },
+        { id: 2, times: '10:00' },
+        { id: 3, times: '11:00' },
+        { id: 4, times: '12:00' },
+        { id: 5, times: '13:00' },
+        { id: 6, times: '14:00' },
+        { id: 7, times: '15:00' },
+        { id: 8, times: '16:00' },
+        { id: 9, times: '17:00' },
         // Add more items as needed
       ];
     const [hour, setHour] = useState(dummyData[0]);
@@ -34,7 +34,7 @@ const Jam = ({doctorData, dateData}) => {
                 { dummyData.map((item, index) => (
                     
                 <button className={`shadow-md drop-shadow-md shadow-[#6B779A] h-24 w-40 max-md:h-10  max-md:w-24 border-[#56BDC5] border-solid text-center justify-center rounded-2xl border-2 max-md:text-sm ${index === selectedHours ? 'bg-[#2ABDC9] bg-opacity-20 text-[#0E464A]':'background-white text-[#6B779A]'}`} key={index} onClick={()=> handleSelectedHours(index)}>
-                    {item.time}
+                    {item.times}
                 </button>
                 ))
 

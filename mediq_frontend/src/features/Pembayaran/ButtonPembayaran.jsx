@@ -1,16 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ButtonPembayaran = ({id, text, data}) => {
+const ButtonPembayaran = ({id, text, data, handleAntrian}) => {
     const navigate = useNavigate();
 
-    function handleNavigate() {
+    const handleNavigate = async () => {
         switch(id){
             case(1) : 
                 navigate('pembayaranBerhasil', {state: {data : data}}); 
                 break
             case(2) : 
-                navigate('bookingBerhasil', {state : {data : '23'}});
+                await handleAntrian();
                 break;
             default :                
                 break;

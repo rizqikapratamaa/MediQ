@@ -2,9 +2,19 @@ import React, { useEffect, useState } from "react";
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const Maps = () => {
+const Maps = ({setUserLocation, getClinicsData,ClinicsData}) => {
   const [map, setMap] = useState(null);
   const [userMarker, setUserMarker] = useState(null);
+  const [clinicMarker, setClinicMarker] = useState(null);
+  const handleUserLocation = (userlatitude, userlongitude) =>{
+    setUserLocation({
+      latitude : userlatitude,
+      longitude : userlongitude,
+    })
+  }
+  const [userLocation, setCurrentLocation] = useState({
+    longitude : 0, latitude : 0
+  });
 
   useEffect(() => {
     mapboxgl.accessToken = 'pk.eyJ1IjoiZGF2ZS1hIiwiYSI6ImNscmM0cGozYzAya20yaWxha2x2cWx0dXgifQ.7f0Sla8l5Lvj70AlEiYGQQ';
@@ -12,38 +22,66 @@ const Maps = () => {
     const newMap = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [0, 0],
+      center: [0,0],
       zoom: -1,
-    });
+    },[]);
 
     setMap(newMap);
 
+    
     return () => {
       newMap.remove();
     };
   }, []);
 
-  const trackUserLocation = () => {
+  const handleClinicsMarker = () => {
+    console.error(ClinicsData);
+      if(ClinicsData){
+        if(clinicMarker){
+          setClinicMarker(null)
+        }
+        console.error(ClinicsData);
+
+        const newClinicMarkers = ClinicsData.map(clinic => {
+          return new mapboxgl.Marker({color : '#F21F61'})
+          .setLngLat([clinic.location.longitude, clinic.location.latitude])
+          .setPopup(new mapboxgl.Popup().setHTML(`<h3>${clinic.fullName}</h3>`))
+          .addTo(map);
+        })
+
+        setClinicMarker(newClinicMarkers);
+      }
+
+  }
+
+  const trackUserLocation = async () => {
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           const {latitude, longitude} = position.coords;
+          handleUserLocation(latitude, longitude)
+          await getClinicsData();
           const marker = new mapboxgl.Marker()
           .setLngLat([longitude,latitude])
           .setPopup(new mapboxgl.Popup().setHTML("<h3>User Location</h3>"))
           .addTo(map);
+          handleClinicsMarker();
           map.flyTo({
             center : [longitude, latitude],
             zoom : 15,
             essential : true,
           });
-          
+         
           setUserMarker(marker);
+          
+          setCurrentLocation({longitude : longitude, latitude: latitude})
         },(error) => {
           console.error(error);
           // Handle errors, e.g., show a message to the user
         },
+        
         { enableHighAccuracy: true }
+        
       )
     } else{
       console.error("Geolocation is not supported by this browser");

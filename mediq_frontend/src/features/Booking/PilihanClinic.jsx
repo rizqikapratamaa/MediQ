@@ -6,27 +6,21 @@ import Person from '../Assets/person.svg'
 import { useNavigate } from "react-router-dom";
 const PilihanClinic = ({ButtonComponent, navigateId, ClinicData}) => {
     const navigate = useNavigate();
-    const [selectedClinic, setSelectedClinic] = useState(null)
-
-    const handleNavigate = (id) => {
-        const selectedClinicData = ClinicData.map(({ name, alamat, Telpon, JumlahDokter }) => ({
-            name,
-            alamat,
-            Telpon,
-            dokter: JumlahDokter  // Corrected field name
-        }));
     
-        const { name, alamat, Telpon: phone, dokter} = selectedClinicData[id];
+    const handleNavigate = (id) => {
+        const { fullName, address, phoneNumber, JumlahDokter, clinicId, Distance} = ClinicData[id];
     
         switch (navigateId) {
             case 1:
                 navigate('antrian', {
                     state: {
                         data: {
-                            name,
-                            alamat,
-                            phone,
-                            dokter
+                            fullName,
+                            address,
+                            phoneNumber,
+                            JumlahDokter,
+                            clinicId, 
+                            Distance
                         }
                     }
                 });
@@ -38,25 +32,35 @@ const PilihanClinic = ({ButtonComponent, navigateId, ClinicData}) => {
                 break;
         }
     }
-    
+    console.log(ClinicData);
+    if(!ClinicData){
+        return(
+            <div className="mt-5 font-poppins">
+            <p>{ButtonComponent.titles}</p>
+            <br />
+            <p className="text-sm">Tidak ada data Clinic.</p>
+            <p className="text-xs text-red-600 font-bold mt-1">Dimohon menekan tombol Cari Klinik Terdekat</p>
+        </div>
+        )
+    }
     
     return(
         <div className="mt-5 font-poppins">
             <p>{ButtonComponent.titles}</p>
             <br></br>
             <div className="flex flex-col gap-10">
-                { ClinicData.map((data,index) => (
+                {ClinicData.map((data,index) => (
                 <div className="w-full h-44 from-[#B4F0EF] to-[#E7F7FA] bg-gradient-to-b rounded-xl relative" key={index}>
                     <div className="absolute bg-[#F21F61] rounded-l-xl rounded-tr-xl w-28 h-8 right-0 text-center text-white flex justify-center items-center max-md:h-6 max-md:w-24 max-md:text-xs ">{data.Distance} km</div>
                     <div className="p-5 max-md:translate-y-5"> 
-                        <h1 className="text-lg max-md:text-sm mb-2">{data.name}</h1>
+                        <h1 className="text-lg max-md:text-sm mb-2">{data.fullName}</h1>
                         <div className="flex gap-3 items-center mb-1 max-md:text-xs">
                             <img src={Location} alt="" className="h-5"/>
-                            <p>{data.alamat}</p>
+                            <p>{data.address}</p>
                         </div>
                         <div className="flex gap-3 items-center mb-1 max-md:text-xs">
                             <img src={Telephone} alt="" className="h-5"/>
-                            <p>No. Telp : {data.Telpon}</p>
+                            <p>No. Telp : {data.phoneNumber}</p>
                         </div>
                         <div className="flex gap-3 items-center mb-1 max-md:text-xs">
                             <img src={Person} alt="" className="h-5"/>
