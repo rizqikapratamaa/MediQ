@@ -9,14 +9,14 @@ const PilihanClinic = ({ButtonComponent, navigateId, ClinicData}) => {
     const [selectedClinic, setSelectedClinic] = useState(null)
 
     const handleNavigate = (id) => {
-        const selectedClinicData = ClinicData.map(({ name, alamat, Telpon, JumlahDoktor }) => ({
+        const selectedClinicData = ClinicData.map(({ name, alamat, Telpon, JumlahDokter }) => ({
             name,
             alamat,
             Telpon,
-            dokter: JumlahDoktor  // Corrected field name
+            dokter: JumlahDokter  // Corrected field name
         }));
     
-        const { name, alamat, Telpon: phone, dokter } = selectedClinicData[id];
+        const { name, alamat, Telpon: phone, dokter} = selectedClinicData[id];
     
         switch (navigateId) {
             case 1:
@@ -60,7 +60,7 @@ const PilihanClinic = ({ButtonComponent, navigateId, ClinicData}) => {
                         </div>
                         <div className="flex gap-3 items-center mb-1 max-md:text-xs">
                             <img src={Person} alt="" className="h-5"/>
-                            <p>Jumlah dokter : {data.JumlahDokter}</p>
+                            <p>{data.text} : {data.JumlahDokter}</p>
                         </div>
                     </div>
                     <div className="absolute bottom-0  h-16 z-10 translate-y-8 border-[5px] bg-white border-white rounded-3xl max-md:text-sm max-md:h-12 max-md:w-40 w-56 translate-x-1/2 right-1/3">

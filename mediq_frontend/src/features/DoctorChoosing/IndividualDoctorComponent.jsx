@@ -26,7 +26,7 @@ const SeparateDoctorComponent = ({data}) => {
                     </div>
                     <div className="flex gap-2 items-center">
                         <img src={Locate} alt="" className="h-5  max-md:h-4"/>
-                        <p className="text-sm max-md:text-[10px]">Lokasi praktik : {data.place}</p>
+                        <p className="text-sm max-md:text-[10px]">Lokasi praktik : {data.location}</p>
                     </div>
                 </div>
             

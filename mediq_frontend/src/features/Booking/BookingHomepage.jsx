@@ -14,7 +14,7 @@ const BookingHomepage = () => {
     }
 
     const clinicDummy = [
-        {name : 'Puskesmas', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDoktor : 4, Distance : 5},{name : 'Puskesmas', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDoktor : 4, Distance : 5},{name : 'Puskesmas', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDoktor : 4, Distance : 5}
+        {name : 'Puskesmas A', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDokter : 4, Distance : 5, text: 'Jumlah Dokter'},{name : 'Puskesmas B', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDokter : 4, Distance : 5, text: 'Jumlah Dokter'},{name : 'Puskesmas C', alamat: 'Jl.Plered No.2, Kec.Antapani', Telpon: '0812-2190-2846', JumlahDokter : 4, Distance : 5, text: 'Jumlah Dokter'}
     ]
     const ButtonComponent = {
         buttonText : 'Book Antrian',

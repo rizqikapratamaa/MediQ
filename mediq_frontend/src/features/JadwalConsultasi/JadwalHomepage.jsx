@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TopBarInside from "../HomePage/TopBarInside";
 import SeparateDoctorComponent from "../DoctorChoosing/IndividualDoctorComponent";
 import Jam from "./Jam";
@@ -9,6 +9,7 @@ import Title from "./Title";
 const JadwalHomepage = () =>{
     const location = useLocation();
     let doctorData = location?.state?.data;
+    const [date, setDate] = useState(new Date());
     return(
         <div>
             <TopBarInside/>
@@ -16,9 +17,9 @@ const JadwalHomepage = () =>{
                 <Title text={'Pilih Jadwal Konsultasi'}/>
                 <SeparateDoctorComponent data={doctorData}/>
                 <ChooseTitle title={'Pilih tanggal'}/>
-                <ConsultationDate/>
+                <ConsultationDate setDate={setDate}/>
                 <ChooseTitle title={'Pilih jam'}/>
-                <Jam doctorData={doctorData}/>
+                <Jam doctorData={doctorData} dateData={date}/>
             </div>
 
         </div>

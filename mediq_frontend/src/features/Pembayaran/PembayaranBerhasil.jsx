@@ -1,12 +1,22 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import TopBarInside from "../HomePage/TopBarInside";
 import Centang from '../Assets/Centang.svg'
 const PembayaranBerhasil = () =>{
     const navigate = useNavigate();
+    const location = useLocation();
 
+    let selectedData = location?.state?.data;
+    console.log(selectedData);
+
+    const handleNeededData = () => {
+        let name, bidang, hour, dateData, label, photo;
+        ({name, bidang, hour, dateData, label, photo} = selectedData);
+        return {name, bidang, hour, dateData, label, photo};
+    }
     const handleNavigate = () => {
-        navigate('/homepage');   
+        console.log(handleNeededData());
+        navigate('/homepage', {state : {data : handleNeededData()}});   
     }
     return(
         <div className="h-screen font-poppins flex items-center flex-col">

@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const ButtonPembayaran = ({id, text}) => {
+const ButtonPembayaran = ({id, text, data}) => {
     const navigate = useNavigate();
 
     function handleNavigate() {
         switch(id){
             case(1) : 
-                navigate('pembayaranBerhasil'); 
+                navigate('pembayaranBerhasil', {state: {data : data}}); 
                 break
             case(2) : 
                 navigate('bookingBerhasil', {state : {data : '23'}});

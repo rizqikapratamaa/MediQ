@@ -8,11 +8,18 @@ import {useLocation} from 'react-router-dom'
 
 const Homepage = () =>{
     const location = useLocation();
-    const [name, setName] = useState('Dave');
-
+    const [name, setName] = useState('');
+    const [activity, setActivity] = useState('')
+    
+    
     useEffect(() => {
-        let selectedName = location?.state?.data;
-        setName(selectedName);
+        let selectedData = location?.state?.data;
+        if(typeof selectedData === 'string'){
+            setName(selectedData);
+        } else{
+            setActivity(selectedData);
+        }
+        console.log("selected Data : ",selectedData);
     }, [])
     return(
         <div className="flex flex-col font-poppins">
@@ -23,7 +30,7 @@ const Homepage = () =>{
             </div>
             <Layanan/>
             <div className="w-full mb-14">
-                <Appointment/>
+                <Appointment data={activity}/>
             </div>
         </div>
     )

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './datepicker.css'
-const ConsultationDate = () => {
+const ConsultationDate = ({setDate}) => {
     const today = new Date();
     const [time, setTime] = useState("");
     const [timeDescription, updateDescription] = useState("Hari ini");
@@ -10,6 +10,17 @@ const ConsultationDate = () => {
         today.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })
     );
 
+
+    const handleFormattedDate = (date) =>{
+        const currentDate = new Date(date);
+        let formattedDate =  `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;   
+        return formattedDate;
+    }
+
+    useEffect(() => {
+        const data = today.toISOString().split('T')[0]; 
+        setDate(handleFormattedDate(data));
+    },[])
     const getWeekDates = (currentDate) => {
         const weekDates = [];
 
@@ -27,7 +38,7 @@ const ConsultationDate = () => {
      
     const optionsIndonesia = { year: 'numeric', month: 'long', day: 'numeric' };
 
-    const handleTimeDescription = (selectedTime)     => {
+    const handleTimeDescription = (selectedTime)  => {
         const currentDay = today.toLocaleDateString('id-ID', {weekday: 'long'});
         if(selectedTime === currentDay){
             updateDescription("Hari ini");
@@ -36,14 +47,21 @@ const ConsultationDate = () => {
         }
     }
 
+    
+
     const handleButtonClick = (index) => {
         setSelectedButton(index);
         const selectedDate = new Date(datesOption[index].date);
-        const formatttedDate = selectedDate.toLocaleDateString('id-ID',optionsIndonesia);
-        setFormattedDateIndonesia(formatttedDate);
+        const adjustedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
+        adjustedDate.setDate(adjustedDate.getDate() + 1);
+        const formatDate = adjustedDate.toISOString().split('T')[0];
+        setFormattedDateIndonesia(selectedDate.toLocaleDateString('id-ID', optionsIndonesia));
         setTime(selectedDate.toISOString());
         handleTimeDescription(datesOption[index].day);
+        let stringFormattedDate = handleFormattedDate(formatDate);
+        setDate(stringFormattedDate);
         }
+        
 
     const handleTimeData = (event) => {
         const selectedTime = event.target.value;
@@ -51,10 +69,17 @@ const ConsultationDate = () => {
         
         const selectedDate = new Date(selectedTime);
         const formattedDate = selectedDate.toLocaleDateString('id-ID', optionsIndonesia);
+        
         setFormattedDateIndonesia(formattedDate);
         setDatesOption(getWeekDates(selectedDate))
         handleTimeDescription(getWeekDates(selectedDate)[0].day);
         setSelectedButton(0);
+        const adjustedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
+        adjustedDate.setDate(adjustedDate.getDate() + 1);
+        const formatDate = adjustedDate.toISOString().split('T')[0];
+        
+        let stringFormattedDate = handleFormattedDate(formatDate);
+        setDate(stringFormattedDate);
         }
     
     return(

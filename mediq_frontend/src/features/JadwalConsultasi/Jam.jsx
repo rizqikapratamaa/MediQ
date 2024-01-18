@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Jam = ({doctorData}) => {
+const Jam = ({doctorData, dateData}) => {
     const navigate = useNavigate();
     const[selectedHours, setSelectedHours] = useState(0);
     
     const handleJanji = () => {
-        navigate('pembayaran', {state: {data : doctorData}});
+        const selectedData = {...doctorData, dateData, hour};
+        navigate('pembayaran', {state: {data : selectedData}});
     } 
     const dummyData = [
         { id: 1, time: '09:00' },
